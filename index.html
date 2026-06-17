@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopi & Citarasa | Estetik Kafe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Peladang Outlet</div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Utama</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#gallery">Galeri</a></li>
+            <li><a href="#about">Tentang Kami</a></li>
+            <li><a href="#contact">Hubungi</a></li>
+        </ul>
+    </nav>
+
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <span class="sub-title">Selamat Datang ke PO Cafe</span>
+            <h1>Nikmati Kopi &<br>Santapan Terbaik</h1>
+            <p>Gabungan rasa premium daripada biji kopi pilihan, manisan kek yang memikat hati, dan hidangan berat yang menyelerakan.</p>
+            <div class="hero-btns">
+                <a href="#menu" class="btn-primary">Lihat Menu</a>
+                <a href="https://www.foodpanda.my" target="_blank" class="btn-secondary">Pesan di Foodpanda</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=800" alt="Aesthetic Cafe">
+        </div>
+    </header>
+
+    <section id="menu" class="menu-section">
+        <div class="section-title">
+            <span>Pilihan Istimewa</span>
+            <h2>Menu Citarasa Kami</h2>
+            <div class="line"></div>
+        </div>
+
+        <div class="menu-tabs">
+            <button class="tab-btn active" data-target="cat-coffee">Coffee</button>
+            <button class="tab-btn" data-target="cat-non-coffee">Non-Coffee</button>
+            <button class="tab-btn" data-target="cat-food">Makanan Berat</button>
+            <button class="tab-btn" data-target="cat-snacks">Makanan Ringan</button>
+            <button class="tab-btn" data-target="cat-icecream">Aiskrim</button>
+        </div>
+
+        <div class="category-wrapper active" id="cat-coffee">
+            <h3 class="category-heading">Coffee</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=600" alt="Kopi Signature">
+                    </div>
+                    <div class="card-info">
+                        <h3>Kopi Latte — RM 11.00</h3>
+                        <p>Biji arabika premium dengan susu segar berkrim.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1510707577719-5d683344d420?auto=format&fit=crop&q=80&w=600" alt="Espresso">
+                    </div>
+                    <div class="card-info">
+                        <h3>Espresso Double — RM 7.00</h3>
+                        <p>Ekstrak kopi pekat untuk tenaga segera.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&q=80&w=600" alt="Cappuccino">
+                    </div>
+                    <div class="card-info">
+                        <h3>Cappuccino — RM 10.00</h3>
+                        <p>Keseimbangan sempurna espresso dan buih susu.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1485808191679-5f63bb3fd2ec?auto=format&fit=crop&q=80&w=600" alt="Caramel Macchiato">
+                    </div>
+                    <div class="card-info">
+                        <h3>Caramel Macchiato — RM 13.00</h3>
+                        <p>Susu manis dengan lapisan espresso dan sirap karamel.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-wrapper" id="cat-non-coffee">
+            <h3 class="category-heading">Non-Coffee</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&q=80&w=600" alt="Matcha Latte">
+                    </div>
+                    <div class="card-info">
+                        <h3>Matcha Latte — RM 13.00</h3>
+                        <p>Serbuk matcha gred Niko Neko tulen bersama susu suam.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1544787210-22bb2edb5793?auto=format&fit=crop&q=80&w=600" alt="Iced Chocolate">
+                    </div>
+                    <div class="card-info">
+                        <h3>Iced Chocolate — RM 11.00</h3>
+                        <p>Coklat Belgium premium yang kaya dan berkrim.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Lemon Tea">
+                    </div>
+                    <div class="card-info">
+                        <h3>Iced Lemon Tea — RM 8.00</h3>
+                        <p>Teh segar dengan perahan lemon asli.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=600" alt="Thai Milk Tea">
+                    </div>
+                    <div class="card-info">
+                        <h3>Thai Milk Tea — RM 9.00</h3>
+                        <p>Teh susu Thailand asli dengan aroma rempah.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-wrapper" id="cat-food">
+            <h3 class="category-heading">Makanan Berat</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600" alt="Grilled Chicken Chop">
+                    </div>
+                    <div class="card-info">
+                        <h3>Grilled Chicken Chop — RM 18.90</h3>
+                        <p>Ayam panggang jus bersama sos lada hitam buatan sendiri.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&q=80&w=600" alt="Nasi Lemak">
+                    </div>
+                    <div class="card-info">
+                        <h3>Nasi Lemak Ayam — RM 15.00</h3>
+                        <p>Nasi lemak harum dengan ayam goreng berempah rangup.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1546548970-71784046aa54?auto=format&fit=crop&q=80&w=600" alt="Pasta">
+                    </div>
+                    <div class="card-info">
+                        <h3>S. Carbonara — RM 17.00</h3>
+                        <p>Pasta berkrim dengan hirisan ayam dan cendawan.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1535231365133-722709e995f9?auto=format&fit=crop&q=80&w=600" alt="Fish and Chips">
+                    </div>
+                    <div class="card-info">
+                        <h3>Fish & Chips — RM 19.00</h3>
+                        <p>Isi ikan dori digoreng emas dengan sos tartar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-wrapper" id="cat-snacks">
+            <h3 class="category-heading">Makanan Ringan</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&q=80&w=600" alt="Croissant">
+                    </div>
+                    <div class="card-info">
+                        <h3>Croissant — RM 7.00</h3>
+                        <p>Pastri Perancis klasik yang dibakar segar setiap pagi.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&q=80&w=600" alt="French Fries">
+                    </div>
+                    <div class="card-info">
+                        <h3>French Fries — RM 8.00</h3>
+                        <p>Kentang goreng rangup dengan taburan herba.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1623156323148-ee03a56f6cc0?auto=format&fit=crop&q=80&w=600" alt="Currypuff">
+                    </div>
+                    <div class="card-info">
+                        <h3>Karipap Pusing — RM 5.00</h3>
+                        <p>Pastri berintikan kentang rempah (3 biji).</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&q=80&w=600" alt="Muffin">
+                    </div>
+                    <div class="card-info">
+                        <h3>Choc Muffin — RM 6.00</h3>
+                        <p>Muffin gebu dengan coklat chip melimpah.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-wrapper" id="cat-icecream">
+            <h3 class="category-heading">Aiskrim</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=600" alt="Aiskrim">
+                    </div>
+                    <div class="card-info">
+                        <h3>Soft Serve — RM 6.50</h3>
+                        <p>Aiskrim lembut buatan sendiri dengan siraman sirap gula melaka pekat.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1576506295286-5cda18df43e7?auto=format&fit=crop&q=80&w=600" alt="Chocolate Ice Cream">
+                    </div>
+                    <div class="card-info">
+                        <h3>Chocolate — RM 6.50</h3>
+                        <p>Aiskrim coklat pekat dengan taburan koko.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&q=80&w=600" alt="Vanilla Bean">
+                    </div>
+                    <div class="card-info">
+                        <h3>Vanilla Bean — RM 6.00</h3>
+                        <p>Aiskrim vanila asli dengan bintik biji vanila.</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1505394033325-a6a61417f30a?auto=format&fit=crop&q=80&w=600" alt="Matcha Swirl">
+                    </div>
+                    <div class="card-info">
+                        <h3>Matcha Swirl — RM 7.50</h3>
+                        <p>Gabungan matcha dan vanila yang menyegarkan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <div class="section-title">
+            <span>Kelebihan</span>
+            <h2>Kenapa Pilih Kami?</h2>
+            <div class="line"></div>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">☕</div>
+                <h3>Kualiti Premium</h3>
+                <p>Hanya menggunakan biji kopi pilihan dan bahan-bahan segar setiap hari.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌿</div>
+                <h3>Suasana Estetik</h3>
+                <p>Ruang yang direka khas untuk keselesaan kerja atau santai bersama rakan.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Harga Berbaloi</h3>
+                <p>Nikmati rasa mewah dengan harga yang sangat mesra poket.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery-section">
+        <div class="section-title">
+            <span>Suasana & Keselesaan</span>
+            <h2>Ruang Untuk Anda</h2>
+            <div class="line"></div>
+        </div>
+        <div class="gallery-container">
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=800" alt="Sudut Coffee">
+                </div>
+                <div class="gallery-item tall">
+                    <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&q=80&w=800" alt="Interior Cozy">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1521017432531-fbd92d744264?auto=format&fit=crop&q=80&w=800" alt="Hiasan Kafe">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&q=80&w=800" alt="Ruang Kerja">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=800" alt="Biji Kopi">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1507133750040-4a8f57021571?auto=format&fit=crop&q=80&w=800" alt="Vibe Kafe">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&q=80&w=800" alt="Interior Kafe">
+            </div>
+            <div class="about-content">
+                <span>Cerita Di Sebalik PO Cafe</span>
+                <h2>Kuala Kangsar</h2>
+                <div class="line-left"></div>
+                <p>Dilahirkan daripada minat yang mendalam terhadap budaya kopi moden dan seni pembuatan pastri, Kopi & Citarasa bukan sekadar sebuah kafe, malah ia adalah ruang komuniti untuk berkumpul, bekerja, dan menenangkan fikiran.</p>
+                <p>Kami percaya bahawa setiap hidangan mempunyai ceritanya yang tersendiri. Daripada pemilihan biji kopi gred premium yang dipanggang sempurna, hinggalah kepada penyediaan hidangan berat dan manisan, semuanya dihasilkan dengan penuh penelitian demi memberikan kepuasan maksimum buat anda.</p>
+                <div class="about-features">
+                    <div class="feature-item">
+                        <h4>100% Premium</h4>
+                        <p>Bahan berkualiti tinggi sahaja.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Ruang Selesa</h4>
+                        <p>Sesuai untuk 'healing' atau kerja.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="section-title">
+            <span></span>boleh isi
+            <h2>Hubungi Kami</h2>
+            <div class="line"></div>
+        </div>
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h4>Lokasi</h4>
+                    <p>No. 12, Jalan Istana, 33000 Kuala Kangsar, Perak</p>
+                </div>
+                <div class="contact-item">
+                    <h4>Waktu Operasi</h4>
+                    <p>Isnin - Ahad: 10:00 AM - 10:00 PM</p>
+                </div>
+                <div class="contact-item">
+                    <h4>WhatsApp</h4>
+                    <p>+60 12-345 6789</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
