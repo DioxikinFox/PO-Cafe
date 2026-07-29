@@ -1,3 +1,117 @@
+/* --- KEKALKAN SEMUA KOD CSS ASAL ANDA DI SINI --- */
+
+/* --- TAMBAHAN BARU (Sila letak di bahagian paling bawah CSS anda) --- */
+
+/* 1. Efek Transisi Latar Belakang Body */
+body {
+    transition: background-color 0.8s ease; 
+}
+
+/* 2. Logo Dinamik (Petak -> Bulat bila scroll) */
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+#dynamic-logo {
+    width: 130px;
+    height: 130px;
+    border-radius: 15px; /* Mula sebagai petak */
+    position: absolute;
+    top: 90px; /* Kedudukan di bawah navbar (dalam hero) */
+    left: 0;
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    object-fit: cover;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.logo {
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    transform: translateX(150px); /* Tolak teks ke tepi sikit untuk bagi ruang logo petak */
+}
+
+/* Apabila navbar discroll */
+.navbar.scrolled #dynamic-logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; /* Tukar jadi bulat */
+    position: relative; 
+    top: 0;
+    box-shadow: none;
+}
+
+.navbar.scrolled .logo {
+    transform: translateX(0); /* Teks kembali ke kedudukan asal rapat dengan logo bulat */
+}
+
+/* 3. Bar Carian (Search) */
+.search-container {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.search-container input {
+    padding: 12px 25px;
+    width: 80%;
+    max-width: 450px;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition-smooth);
+    font-family: 'Poppins', sans-serif;
+}
+.search-container input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(74, 53, 37, 0.1);
+}
+
+/* 4. Lightbox (Pop-up Gambar Besar) */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+.lightbox.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+}
+.lightbox-content {
+    max-width: 85%;
+    max-height: 85vh;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    object-fit: contain;
+}
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.lightbox-close:hover {
+    color: var(--accent-color);
+}
+
+/* Galeri Hover Pointer */
+.gallery-item img {
+    cursor: pointer;
+}
 /* --- RESET & VARIABLES --- */
 * {
     margin: 0;
