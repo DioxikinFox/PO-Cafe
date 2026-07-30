@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopi & Citarasa | Estetik Kafe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="logo-wrapper">
+            <div class="logo">Peladang Outlet</div>
+        </div>
+        
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Utama</a></li>
+            <li><a href="#promo">Menu Baru</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#features">Kelebihan</a></li>
+            <li><a href="#gallery">Galeri</a></li>
+            <li><a href="#about">Tentang Kami</a></li>
+        </ul>
+    </nav>
+
+    <!-- HEADER / HERO SECTION -->
+    <header id="home" class="hero" data-bg="#faf6f0">
+        <div class="hero-content">
+            <span class="sub-title">Selamat Datang ke PO Cafe</span>
+            <h1>Nikmati Kopi &<br>Santapan Terbaik</h1>
+            <p>Gabungan rasa premium daripada biji kopi pilihan, manisan kek yang memikat hati, dan hidangan berat yang menyelerakan.</p>
+            <div class="hero-btns">
+                <a href="#menu" class="btn-primary">Lihat Menu</a>
+            </div>
+        </div>
+        
+        <div class="hero-image">
+            <img id="hero-logo-img" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=800" alt="Aesthetic Cafe">
+        </div>
+    </header>
+
+    <!-- SEKSYEN MENU BARU & PROMOSI (Slider untuk Komputer) -->
+    <section id="promo" class="promo-section" data-bg="#f5f0eb">
+        <div class="section-title">
+            <span>Eksklusif & Terkini</span>
+            <h2>Menu Baru & Promosi</h2>
+            <div class="line"></div>
+        </div>
+
+        <div class="promo-slider">
+            <div class="promo-card menu-card">
+                <span class="promo-tag-badge">HOT 🔥</span>
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=600" alt="Promo Kopi">
+                </div>
+                <div class="card-info">
+                    <h3>Signature Coffee Series</h3>
+                    <p class="desc">Nikmati rasa kopi arabika premium dengan harga promosi minggu ini!</p>
+                    <p class="price">RM 13.00</p>
+                </div>
+            </div>
+
+            <div class="promo-card menu-card">
+                <span class="promo-tag-badge">BARU 🌟</span>
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1621996346565-e3d5d628825a?auto=format&fit=crop&q=80&w=600" alt="Promo Pasta">
+                </div>
+                <div class="card-info">
+                    <h3>Creamy Chicken Spaghetti</h3>
+                    <p class="desc">Menu pasta baru yang pekat, berlemak, dan memikat selera anda.</p>
+                    <p class="price">RM 19.90</p>
+                </div>
+            </div>
+
+            <div class="promo-card menu-card">
+                <span class="promo-tag-badge">BEST SELLER</span>
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=600" alt="Ayam Gepuk Crispy">
+                </div>
+                <div class="card-info">
+                    <h3>Nasi Ayam Gepuk Crispy</h3>
+                    <p class="desc">Paling laris (#1 most liked)! Sambal berapi bikin ketagih.</p>
+                    <p class="price">RM 18.90</p>
+                </div>
+            </div>
+
+            <div class="promo-card menu-card">
+                <span class="promo-tag-badge">PROMO 💧</span>
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Sparkling">
+                </div>
+                <div class="card-info">
+                    <h3>Sparkling Americano Series</h3>
+                    <p class="desc">Kesegaran soda berais digabung bersama ekstrak espresso tulen.</p>
+                    <p class="price">RM 13.00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU SECTIONS -->
+    <section id="menu" class="menu-section" data-bg="#ffffff">
+        <div class="section-title">
+            <span>Pilihan Istimewa</span>
+            <h2>Menu Citarasa Kami</h2>
+            <div class="line"></div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Cari makanan, minuman, aiskrim...">
+        </div>
+
+        <div class="menu-tabs">
+            <button class="tab-btn active" data-target="cat-pasta">Pasta</button>
+            <button class="tab-btn" data-target="cat-western">Western</button>
+            <button class="tab-btn" data-target="cat-kampung">Kampung Series</button>
+            <button class="tab-btn" data-target="cat-breakfast">Breakfast</button>
+            <button class="tab-btn" data-target="cat-gepuk">Ayam Gepuk</button>
+            <button class="tab-btn" data-target="cat-extra">Extra</button>
+            <button class="tab-btn" data-target="cat-kids">Kids Meal</button>
+            <button class="tab-btn" data-target="cat-coffee">Coffee</button>
+            <button class="tab-btn" data-target="cat-sparkling">Sparkling Americano</button>
+            <button class="tab-btn" data-target="cat-fizzy">Fizzy Beverages</button>
+            <button class="tab-btn" data-target="cat-non-coffee">Non Coffee</button>
+            <button class="tab-btn" data-target="cat-matcha">Matcha Series</button>
+            <button class="tab-btn" data-target="cat-frappe">Frappe</button>
+        </div>
+
+        <!-- 1. PASTA -->
+        <div class="category-wrapper active" id="cat-pasta">
+            <h3 class="category-heading">Pasta</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1621996346565-e3d5d628825a?auto=format&fit=crop&q=80&w=600" alt="Beef Bolognese"></div>
+                    <div class="card-info">
+                        <h3>Beef Bolognese</h3>
+                        <p class="desc">Slow-cooked beef bolognese sauce with selected herbs for a rich & appetizing flavor</p>
+                        <p class="price">RM 21.90</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&q=80&w=600" alt="Creamy Chicken Spaghetti"></div>
+                    <div class="card-info">
+                        <h3>Creamy Chicken Spaghetti</h3>
+                        <p class="desc">Spaghetti cooked with chicken in a thick & creamy spiced cream sauce</p>
+                        <p class="price">RM 21.90</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&q=80&w=600" alt="Rustic Garlic Shrimp Spaghetti"></div>
+                    <div class="card-info">
+                        <h3>Rustic Garlic Shrimp Spaghetti</h3>
+                        <p class="desc">Spaghetti cooked with shrimp sautéed with fragrant garlic, olive oil & selected herbs</p>
+                        <p class="price">RM 21.90</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. WESTERN -->
+        <div class="category-wrapper" id="cat-western">
+            <h3 class="category-heading">Western</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=600" alt="Chicken Tender"></div>
+                    <div class="card-info">
+                        <h3>Chicken Tender</h3>
+                        <p class="desc">Isi ayam rangup disajikan bersama sos pilihan.</p>
+                        <p class="price">RM 22.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600" alt="Fried Chicken Chop"></div>
+                    <div class="card-info">
+                        <h3>Fried Chicken Chop</h3>
+                        <p class="desc">Chicken chop goreng rangup keemasan dengan sos istimewa.</p>
+                        <p class="price">RM 17.90</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&q=80&w=600" alt="Cheesy Wedges"></div>
+                    <div class="card-info">
+                        <h3>Cheesy Wedges</h3>
+                        <p class="desc">Kentang baji digoreng rangup disiram sos keju pekat.</p>
+                        <p class="price">RM 10.70</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. KAMPUNG SERIES -->
+        <div class="category-wrapper" id="cat-kampung">
+            <h3 class="category-heading">Kampung Series</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&q=80&w=600" alt="Nasi Goreng Kampung"></div>
+                    <div class="card-info">
+                        <h3>Nasi Goreng Kampung</h3>
+                        <p class="desc">Nasi goreng gaya tradisional berasa ikan bilis dan cili.</p>
+                        <p class="price">RM 12.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&q=80&w=600" alt="Nasi Goreng Cina"></div>
+                    <div class="card-info">
+                        <h3>Nasi Goreng Cina</h3>
+                        <p class="desc">Nasi goreng ringkas yang tidak pedas dan enak.</p>
+                        <p class="price">RM 12.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=600" alt="Nasi Goreng Cili Padi"></div>
+                    <div class="card-info">
+                        <h3>Nasi Goreng Cili Padi</h3>
+                        <p class="desc">Nasi goreng pedas menyengat dengan cili padi segar.</p>
+                        <p class="price">RM 12.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600" alt="Nasi Goreng Chicken Chop"></div>
+                    <div class="card-info">
+                        <h3>Nasi Goreng Chicken Chop</h3>
+                        <p class="desc">Nasi goreng istimewa dihidangkan bersama chicken chop.</p>
+                        <p class="price">RM 23.20</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. BREAKFAST -->
+        <div class="category-wrapper" id="cat-breakfast">
+            <h3 class="category-heading">Breakfast</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=600" alt="Telur Separuh Masak"></div>
+                    <div class="card-info">
+                        <h3>Telur Separuh Masak</h3>
+                        <p class="desc">2 Pcs telur separuh masak segar.</p>
+                        <p class="price">RM 6.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&q=80&w=600" alt="Nasi Lemak Telur Mata"></div>
+                    <div class="card-info">
+                        <h3>Nasi Lemak Telur Mata</h3>
+                        <p class="desc">Nasi lemak wangi berserta telur mata kerbau.</p>
+                        <p class="price">RM 9.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=600" alt="Nasi Lemak Ayam Crispy"></div>
+                    <div class="card-info">
+                        <h3>Nasi Lemak Ayam Crispy</h3>
+                        <p class="desc">Nasi lemak lengkap bersama ayam goreng crispy.</p>
+                        <p class="price">RM 17.90</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&q=80&w=600" alt="Roti Bakar"></div>
+                    <div class="card-info">
+                        <h3>Roti Bakar</h3>
+                        <p class="desc">Roti bakar rangup disapu kaya dan mentega.</p>
+                        <p class="price">RM 5.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&q=80&w=600" alt="Big Breakfast"></div>
+                    <div class="card-info">
+                        <h3>Big Breakfast</h3>
+                        <p class="desc">Set sarapan pagi ala barat yang mengenyangkan.</p>
+                        <p class="price">RM 15.40</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. AYAM GEPUK -->
+        <div class="category-wrapper" id="cat-gepuk">
+            <h3 class="category-heading">Ayam Gepuk</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=600" alt="Nasi Ayam Gepuk Original"></div>
+                    <div class="card-info">
+                        <h3>Nasi Ayam Gepuk Original</h3>
+                        <p class="desc">Nasi bersama ayam gepuk original dan sambal pedas.</p>
+                        <p class="price">RM 19.20</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=600" alt="Nasi Ayam Gepuk Crispy"></div>
+                    <div class="card-info">
+                        <h3>Nasi Ayam Gepuk Crispy</h3>
+                        <p class="desc">Ayam gepuk versi rangup (#1 most liked).</p>
+                        <p class="price">RM 20.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=600" alt="Set Nasi Ayam Gepuk"></div>
+                    <div class="card-info">
+                        <h3>Set Nasi Ayam Gepuk</h3>
+                        <p class="desc">Set lengkap istimewa nasi ayam gepuk.</p>
+                        <p class="price">RM 22.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. EXTRA -->
+        <div class="category-wrapper" id="cat-extra">
+            <h3 class="category-heading">Extra</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=600" alt="Ayam Crispy"></div>
+                    <div class="card-info">
+                        <h3>Ayam Crispy</h3>
+                        <p class="desc">2 Pcs tambahan ayam crispy.</p>
+                        <p class="price">RM 10.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=600" alt="Ayam Gepuk"></div>
+                    <div class="card-info">
+                        <h3>Ayam Gepuk</h3>
+                        <p class="desc">Ketulan ayam gepuk tambahan (#2 most liked).</p>
+                        <p class="price">RM 12.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&q=80&w=600" alt="Nasi"></div>
+                    <div class="card-info">
+                        <h3>Nasi Putih</h3>
+                        <p class="desc">Sepinggan nasi putih tambahan.</p>
+                        <p class="price">RM 4.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&q=80&w=600" alt="Sambal Gepuk"></div>
+                    <div class="card-info">
+                        <h3>Sambal Gepuk</h3>
+                        <p class="desc">Ekstra sambal gepuk berapi.</p>
+                        <p class="price">RM 5.40</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&q=80&w=600" alt="Sambal Nasi Lemak"></div>
+                    <div class="card-info">
+                        <h3>Sambal Nasi Lemak</h3>
+                        <p class="desc">Ekstra sambal nasi lemak.</p>
+                        <p class="price">RM 2.70</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=600" alt="Kobis Goreng"></div>
+                    <div class="card-info">
+                        <h3>Kobis Goreng</h3>
+                        <p class="desc">Kobis goreng rangup.</p>
+                        <p class="price">RM 5.40</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=600" alt="Tempe Goreng"></div>
+                    <div class="card-info">
+                        <h3>Tempe Goreng</h3>
+                        <p class="desc">Tempe goreng rangup.</p>
+                        <p class="price">RM 4.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. KIDS MEAL -->
+        <div class="category-wrapper" id="cat-kids">
+            <h3 class="category-heading">Kids Meal</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&q=80&w=600" alt="French Fries"></div>
+                    <div class="card-info">
+                        <h3>French Fries</h3>
+                        <p class="desc">Kentang goreng saiz kanak-kanak.</p>
+                        <p class="price">RM 9.40</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=600" alt="Chicken Nugget"></div>
+                    <div class="card-info">
+                        <h3>Chicken Nugget</h3>
+                        <p class="desc">Nugget ayam goreng keemasan.</p>
+                        <p class="price">RM 15.20</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600" alt="Cocktail Sausage"></div>
+                    <div class="card-info">
+                        <h3>Cocktail Sausage</h3>
+                        <p class="desc">Sosej cocktail digoreng sempurna.</p>
+                        <p class="price">RM 9.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=600" alt="Combo Food & Water"></div>
+                    <div class="card-info">
+                        <h3>Combo Food & Water</h3>
+                        <p class="desc">Set combo makanan dan minuman kanak-kanak.</p>
+                        <p class="price">RM 15.20</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. COFFEE -->
+        <div class="category-wrapper" id="cat-coffee">
+            <h3 class="category-heading">Coffee</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=600" alt="Americano"></div>
+                    <div class="card-info">
+                        <h3>Americano</h3>
+                        <p class="desc">Espresso segar bersama air.</p>
+                        <p class="price">from RM 11.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=600" alt="Latte"></div>
+                    <div class="card-info">
+                        <h3>Latte</h3>
+                        <p class="desc">Espresso dengan susu segar.</p>
+                        <p class="price">from RM 12.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&q=80&w=600" alt="Cappuccino"></div>
+                    <div class="card-info">
+                        <h3>Cappuccino</h3>
+                        <p class="desc">Keseimbangan buih susu dan espresso (#3 most liked).</p>
+                        <p class="price">from RM 12.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Mocha"></div>
+                    <div class="card-info">
+                        <h3>Mocha</h3>
+                        <p class="desc">Gabungan kopi dan coklat.</p>
+                        <p class="price">from RM 16.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Vanilla Latte"></div>
+                    <div class="card-info">
+                        <h3>Vanilla Latte</h3>
+                        <p class="desc">Latte perisa vanila.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Caramel Latte"></div>
+                    <div class="card-info">
+                        <h3>Caramel Latte</h3>
+                        <p class="desc">Latte perisa karamel.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Hazelnut Latte"></div>
+                    <div class="card-info">
+                        <h3>Hazelnut Latte</h3>
+                        <p class="desc">Latte perisa hazelnut wangi.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Roasted Hazelnut"></div>
+                    <div class="card-info">
+                        <h3>Roasted Hazelnut</h3>
+                        <p class="desc">Kopi perisa hazelnut panggang.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Salted Caramel"></div>
+                    <div class="card-info">
+                        <h3>Salted Caramel</h3>
+                        <p class="desc">Kopi karamel masin lemak manis.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Tiramisu"></div>
+                    <div class="card-info">
+                        <h3>Tiramisu</h3>
+                        <p class="desc">Kopi berperisa kek tiramisu.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Macadamia Nut"></div>
+                    <div class="card-info">
+                        <h3>Macadamia Nut</h3>
+                        <p class="desc">Kopi berperisa kekacang macadamia.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Butterscotch"></div>
+                    <div class="card-info">
+                        <h3>Butterscotch</h3>
+                        <p class="desc">Kopi berperisa butterscotch berkrim.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Tofflenut"></div>
+                    <div class="card-info">
+                        <h3>Tofflenut</h3>
+                        <p class="desc">Kopi berperisa tofflenut istimewa.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600" alt="Spanish Latte"></div>
+                    <div class="card-info">
+                        <h3>Spanish Latte</h3>
+                        <p class="desc">Latte gaya Sepanyol yang kaya.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1485808191679-5f63bb3fd2ec?auto=format&fit=crop&q=80&w=600" alt="Caramel Macchiato"></div>
+                    <div class="card-info">
+                        <h3>Caramel Macchiato</h3>
+                        <p class="desc">Sirap karamel, susu dan espresso.</p>
+                        <p class="price">RM 17.60</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. SPARKLING AMERICANO -->
+        <div class="category-wrapper" id="cat-sparkling">
+            <h3 class="category-heading">Sparkling Americano</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Green Apple Americano"></div>
+                    <div class="card-info">
+                        <h3>Green Apple Americano</h3>
+                        <p class="desc">Americano ais bersama soda perisa epal hijau.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Strawberry Americano"></div>
+                    <div class="card-info">
+                        <h3>Strawberry Americano</h3>
+                        <p class="desc">Americano ais bersama soda perisa strawberi.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Blue Lagoon Americano"></div>
+                    <div class="card-info">
+                        <h3>Blue Lagoon Americano</h3>
+                        <p class="desc">Americano ais bersama soda blue lagoon.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Watermelon Americano"></div>
+                    <div class="card-info">
+                        <h3>Watermelon Americano</h3>
+                        <p class="desc">Americano ais bersama soda perisa tembikai.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Lychee Americano"></div>
+                    <div class="card-info">
+                        <h3>Lychee Americano</h3>
+                        <p class="desc">Americano ais bersama soda perisa laici.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. FIZZY BEVERAGES -->
+        <div class="category-wrapper" id="cat-fizzy">
+            <h3 class="category-heading">Fizzy Beverages</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Green Apple Sparkling"></div>
+                    <div class="card-info">
+                        <h3>Green Apple Sparkling</h3>
+                        <p class="desc">Air soda menyegarkan perisa epal hijau.</p>
+                        <p class="price">RM 13.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Strawberry Lemonade Sparkling"></div>
+                    <div class="card-info">
+                        <h3>Strawberry Lemonade Sparkling</h3>
+                        <p class="desc">Soda strawberi lemon yang menyegarkan.</p>
+                        <p class="price">RM 13.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Blue Lagoon Lemonade Sparkling"></div>
+                    <div class="card-info">
+                        <h3>Blue Lagoon Lemonade Sparkling</h3>
+                        <p class="desc">Soda blue lagoon lemon.</p>
+                        <p class="price">RM 13.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Watermelon Lychee Sparkling"></div>
+                    <div class="card-info">
+                        <h3>Watermelon Lychee Sparkling</h3>
+                        <p class="desc">Soda tembikai laici.</p>
+                        <p class="price">RM 13.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Lychee Lemonade Sparkling"></div>
+                    <div class="card-info">
+                        <h3>Lychee Lemonade Sparkling</h3>
+                        <p class="desc">Soda laici lemon.</p>
+                        <p class="price">RM 13.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Butterfly Lemonade Sparkling"></div>
+                    <div class="card-info">
+                        <h3>Butterfly Lemonade Sparkling</h3>
+                        <p class="desc">Soda bunga telang lemon.</p>
+                        <p class="price">RM 13.60</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. NON COFFEE -->
+        <div class="category-wrapper" id="cat-non-coffee">
+            <h3 class="category-heading">Non Coffee</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1544787210-22bb2edb5793?auto=format&fit=crop&q=80&w=600" alt="Chocolate"></div>
+                    <div class="card-info">
+                        <h3>Chocolate</h3>
+                        <p class="desc">Coklat kaya dan berkrim.</p>
+                        <p class="price">from RM 13.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=600" alt="Strawberry Cloud"></div>
+                    <div class="card-info">
+                        <h3>Strawberry Cloud</h3>
+                        <p class="desc">Minuman strawberi bertekstur awan berkrim.</p>
+                        <p class="price">RM 20.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1544787210-22bb2edb5793?auto=format&fit=crop&q=80&w=600" alt="Strawberry Chocolate"></div>
+                    <div class="card-info">
+                        <h3>Strawberry Chocolate</h3>
+                        <p class="desc">Gabungan coklat dan strawberi.</p>
+                        <p class="price">RM 21.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Sirap"></div>
+                    <div class="card-info">
+                        <h3>Sirap</h3>
+                        <p class="desc">Air sirap sejuk.</p>
+                        <p class="price">RM 5.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600" alt="Oren Sunquick"></div>
+                    <div class="card-info">
+                        <h3>Oren Sunquick</h3>
+                        <p class="desc">Jus oren segar sunquick.</p>
+                        <p class="price">RM 6.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1544787210-22bb2edb5793?auto=format&fit=crop&q=80&w=600" alt="Vanilla Chocolate"></div>
+                    <div class="card-info">
+                        <h3>Vanilla Chocolate</h3>
+                        <p class="desc">Coklat berperisa vanila.</p>
+                        <p class="price">from RM 16.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1544787210-22bb2edb5793?auto=format&fit=crop&q=80&w=600" alt="Salted Caramel Chocolate"></div>
+                    <div class="card-info">
+                        <h3>Salted Caramel Chocolate</h3>
+                        <p class="desc">Coklat berkaramel masin.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1544787210-22bb2edb5793?auto=format&fit=crop&q=80&w=600" alt="Strawberry"></div>
+                    <div class="card-info">
+                        <h3>Strawberry</h3>
+                        <p class="desc">Minuman perisa strawberi.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1544787210-22bb2edb5793?auto=format&fit=crop&q=80&w=600" alt="Teh Boh"></div>
+                    <div class="card-info">
+                        <h3>Teh Boh</h3>
+                        <p class="desc">Teh boh ais klasik.</p>
+                        <p class="price">from RM 5.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1544787210-22bb2edb5793?auto=format&fit=crop&q=80&w=600" alt="Kopi Che Nah"></div>
+                    <div class="card-info">
+                        <h3>Kopi Che Nah</h3>
+                        <p class="desc">Kopi kampung istimewa Che Nah.</p>
+                        <p class="price">from RM 5.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. MATCHA SERIES -->
+        <div class="category-wrapper" id="cat-matcha">
+            <h3 class="category-heading">Matcha Series</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&q=80&w=600" alt="Matcha Latte"></div>
+                    <div class="card-info">
+                        <h3>Matcha Latte</h3>
+                        <p class="desc">Serbuk matcha tulen bersama susu.</p>
+                        <p class="price">from RM 15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&q=80&w=600" alt="Matcha Strawberry"></div>
+                    <div class="card-info">
+                        <h3>Matcha Strawberry</h3>
+                        <p class="desc">Gabungan unik matcha dan strawberi.</p>
+                        <p class="price">from RM 17.60</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&q=80&w=600" alt="Matcha Chocolate"></div>
+                    <div class="card-info">
+                        <h3>Matcha Chocolate</h3>
+                        <p class="desc">Gabungan matcha dan coklat.</p>
+                        <p class="price">from RM 17.60</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. FRAPPE -->
+        <div class="category-wrapper" id="cat-frappe">
+            <h3 class="category-heading">Frappe</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=600" alt="Mocha Frappe"></div>
+                    <div class="card-info">
+                        <h3>Mocha Frappe</h3>
+                        <p class="desc">Frappe mocha kisar ais.</p>
+                        <p class="price">from RM 20.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=600" alt="Cappuccino Frappe"></div>
+                    <div class="card-info">
+                        <h3>Cappuccino Frappe</h3>
+                        <p class="desc">Frappe cappuccino kisar ais.</p>
+                        <p class="price">from RM 20.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=600" alt="Chocolate Frappe"></div>
+                    <div class="card-info">
+                        <h3>Chocolate Frappe</h3>
+                        <p class="desc">Frappe coklat kisar ais.</p>
+                        <p class="price">from RM 20.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=600" alt="Tiramisu Frappe"></div>
+                    <div class="card-info">
+                        <h3>Tiramisu Frappe</h3>
+                        <p class="desc">Frappe tiramisu kisar ais.</p>
+                        <p class="price">from RM 20.30</p>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=600" alt="Oreo Chocolate"></div>
+                    <div class="card-info">
+                        <h3>Oreo Chocolate</h3>
+                        <p class="desc">Frappe coklat bersama biskut oreo.</p>
+                        <p class="price">from RM 21.60</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KELEBIHAN -->
+    <section id="features" class="features-section" data-bg="#fdf5ec">
+        <div class="section-title">
+            <span>Kelebihan</span>
+            <h2>Kenapa Pilih Kami?</h2>
+            <div class="line"></div>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">☕</div>
+                <h3>Kualiti Premium</h3>
+                <p>Hanya menggunakan biji kopi pilihan dan bahan-bahan segar setiap hari.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌿</div>
+                <h3>Suasana Estetik</h3>
+                <p>Ruang yang direka khas untuk keselesaan kerja atau santai bersama rakan.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Harga Berbaloi</h3>
+                <p>Nikmati rasa mewah dengan harga yang sangat mesra poket.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERI -->
+    <section id="gallery" class="gallery-section" data-bg="#f4f7f4">
+        <div class="section-title">
+            <span>Suasana & Keselesaan</span>
+            <h2>Ruang Untuk Anda</h2>
+            <div class="line"></div>
+        </div>
+        <div class="gallery-container">
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=800" alt="Sudut Coffee"></div>
+                <div class="gallery-item tall"><img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&q=80&w=800" alt="Interior Cozy"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1521017432531-fbd92d744264?auto=format&fit=crop&q=80&w=800" alt="Hiasan Kafe"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&q=80&w=800" alt="Ruang Kerja"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=800" alt="Biji Kopi"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1507133750040-4a8f57021571?auto=format&fit=crop&q=80&w=800" alt="Vibe Kafe"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TENTANG KAMI -->
+    <section id="about" class="about-section" data-bg="#fcf4f4">
+        <div class="about-container">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&q=80&w=800" alt="Interior Kafe">
+            </div>
+            <div class="about-content">
+                <span>Cerita Di Sebalik PO Cafe</span>
+                <h2>Kuala Kangsar</h2>
+                <div class="line-left"></div>
+                <p>Dilahirkan daripada minat yang mendalam terhadap budaya kopi moden dan seni pembuatan pastri, Kopi & Citarasa bukan sekadar sebuah kafe, malah ia adalah ruang komuniti untuk berkumpul, bekerja, dan menenangkan fikiran.</p>
+                <div class="about-features">
+                    <div class="feature-item">
+                        <h4>100% Premium</h4>
+                        <p>Bahan berkualiti tinggi sahaja.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Ruang Selesa</h4>
+                        <p>Sesuai untuk 'healing' atau kerja.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAKLUMAT RASMI -->
+    <section id="contact" class="contact-section" data-bg="#f0f4f8">
+        <div class="section-title">
+            <span>Maklumat Rasmi</span>
+            <h2>Hubungi & Kunjungi Kami</h2>
+            <div class="line"></div>
+        </div>
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h4>Alamat</h4>
+                    <p>59A, Jalan Kangsar, Bandar Baru,<br>33000 Kuala Kangsar, Perak</p>
+                </div>
+                <div class="contact-item">
+                    <h4>Waktu Operasi</h4>
+                    <p>Isnin - Sabtu: 11:00 AM - 10:00 PM<br>(Ahad Tutup)</p>
+                </div>
+                <div class="contact-item">
+                    <h4>Telefon / WhatsApp</h4>
+                    <p>010-3924562</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIGHTBOX UNTUK GALERI -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
