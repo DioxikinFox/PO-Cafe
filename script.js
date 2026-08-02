@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- 1. MOBILE MENU TOGGLE ---
     const menuToggle = document.getElementById('mobile-menu');
     const navLinks = document.querySelector('.nav-links');
     const navItems = document.querySelectorAll('.nav-links a');
@@ -19,14 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- 2. MENU TABS FILTER ---
     const tabs = document.querySelectorAll('.tab-btn');
     const contents = document.querySelectorAll('.category-wrapper');
-    const menuCards = document.querySelectorAll('.menu-card');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const target = tab.getAttribute('data-target');
-            menuCards.forEach(c => c.classList.remove('show-info'));
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             contents.forEach(content => {
@@ -35,19 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    menuCards.forEach(card => {
-        card.addEventListener('click', () => card.classList.toggle('show-info'));
-    });
-
+    // --- 3. SEARCH MENU ---
     const searchInput = document.getElementById('searchInput');
+    const menuCards = document.querySelectorAll('.menu-card');
+    
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const filterText = e.target.value.toLowerCase();
             if (filterText.trim() !== '') {
                 contents.forEach(content => content.classList.add('active'));
                 menuCards.forEach(card => {
-                    const itemText = card.textContent.toLowerCase();
-                    card.style.display = itemText.includes(filterText) ? 'block' : 'none';
+                    // Cari tajuk (h3) dan penerangan (.desc) dalam kad
+                    const titleText = card.querySelector('h3').textContent.toLowerCase();
+                    const descText = card.querySelector('.desc').textContent.toLowerCase();
+                    
+                    if(titleText.includes(filterText) || descText.includes(filterText)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
                 });
             } else {
                 const activeTab = document.querySelector('.tab-btn.active').getAttribute('data-target');
@@ -57,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- 4. SCROLL EFFECT & DYNAMIC BACKGROUND ---
     const navbar = document.getElementById('navbar');
     const sections = document.querySelectorAll('section, header');
 
@@ -79,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.backgroundColor = currentBg;
     });
 
+    // --- 5. GALLERY LIGHTBOX ---
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const closeBtn = document.querySelector('.lightbox-close');
@@ -91,10 +99,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- 6. MENU MODAL (POPUP INFO KIRI & KANAN) ---
+    const menuModal = document.getElementById('menu-modal');
+    const menuModalClose = document.querySelector('.menu-modal-close');
+    const modalImg = document.getElementById('modal-img');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalPrice = document.getElementById('modal-price');
+
+    // Buka modal apabila kad menu ditekan
+    menuCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const imgSrc = card.querySelector('.card-img-wrapper img').src;
+            const title = card.querySelector('.card-info h3').innerText;
+            const desc = card.querySelector('.card-info .desc').innerText;
+            const price = card.querySelector('.card-info .price').innerText;
+
+            modalImg.src = imgSrc;
+            modalTitle.innerText = title;
+            modalDesc.innerText = desc;
+            modalPrice.innerText = price;
+
+            menuModal.classList.add('show');
+            document.body.style.overflow = 'hidden'; 
+        });
+    });
+
+    // Tutup pelbagai Modal & Lightbox
     if (closeBtn && lightbox) {
         closeBtn.addEventListener('click', () => lightbox.classList.remove('show'));
-        lightbox.addEventListener('click', (e) => {
-            if (e.target !== lightboxImg) lightbox.classList.remove('show');
+    }
+    
+    if (menuModalClose && menuModal) {
+        menuModalClose.addEventListener('click', () => {
+            menuModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
         });
     }
+
+    // Tutup jika klik kawasan luar popup
+    window.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            lightbox.classList.remove('show');
+        }
+        if (e.target === menuModal) {
+            menuModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+    });
 });

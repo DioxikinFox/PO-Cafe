@@ -13,7 +13,7 @@
         <div class="logo-wrapper">
             <div class="logo">Peladang Outlet</div>
         </div>
-        
+
         <div class="menu-toggle" id="mobile-menu">
             <span class="bar"></span>
             <span class="bar"></span>
@@ -37,11 +37,10 @@
             <p>Gabungan rasa premium daripada biji kopi pilihan, manisan kek yang memikat hati, dan hidangan berat yang menyelerakan.</p>
             <div class="hero-btns">
                 <a href="#menu" class="btn-primary">Lihat Menu</a>
-                <!-- Butang Foodpanda Ditambah Di Sini -->
                 <a href="https://www.foodpanda.my/ms/restaurant/hvlk/po-cafe-royal-kuala-kangsar" class="btn-outline" target="_blank">🐼 Foodpanda</a>
             </div>
         </div>
-        
+
         <div class="hero-image">
             <img id="hero-logo-img" src="Bahan/logobaru.jpeg" alt="Aesthetic Cafe">
         </div>
@@ -909,6 +908,28 @@
     <div id="lightbox" class="lightbox">
         <span class="lightbox-close">&times;</span>
         <img class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <!-- MODAL POPUP UNTUK MENU KIRI & KANAN -->
+    <div id="menu-modal" class="menu-modal">
+        <div class="menu-modal-box">
+            <span class="menu-modal-close">&times;</span>
+            <div class="menu-modal-body">
+                <!-- Bahagian Gambar (Kiri) -->
+                <div class="menu-modal-img">
+                    <img id="modal-img" src="" alt="Menu Penuh">
+                </div>
+                <!-- Bahagian Info (Kanan) -->
+                <div class="menu-modal-info">
+                    <h2 id="modal-title">Nama Menu</h2>
+                    <p id="modal-desc" class="modal-desc">Penerangan menu akan dipaparkan di sini.</p>
+                    <p id="modal-price" class="modal-price">RM 0.00</p>
+                    
+                    <!-- Butang terus ke Foodpanda -->
+                    <a href="https://www.foodpanda.my/ms/restaurant/hvlk/po-cafe-royal-kuala-kangsar" target="_blank" class="btn-primary modal-btn">🐼 Pesan di Foodpanda</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
