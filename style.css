@@ -103,11 +103,15 @@ body.scrolled .logo-wrapper {
 }
 
 #hero-logo-img {
-    width: 380px;
-    height: 380px;
+    width: 500px;
+    height: 500px;
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    /* 3 KOD BARU UNTUK ZOOM & POTONG BORDER HITAM */
+    transform: scale(1.1); /* Zoom gambar sebanyak 25% */
+    clip-path: circle(46% at 51% 50%); /* Kekalkan potongan bulat yang ngam dengan zoom */
+    /* filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.4)); Ganti box-shadow sebab clip-path hilangkan shadow */
     transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 10;
 }
@@ -120,6 +124,10 @@ body.scrolled #hero-logo-img {
     height: 44px;
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    /* Kekalkan fungsi zoom & potong supaya logo kecil tak nampak pelik */
+    transform: scale(1.15); 
+    clip-path: circle(40% at 50% 50%); 
+    /* filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5)); */
     z-index: 3500;
 }
 
