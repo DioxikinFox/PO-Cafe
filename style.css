@@ -223,3 +223,20 @@ body.menu-open #hero-logo-img { opacity: 0; pointer-events: none; }
     .modal-price { font-size: 1.3rem; margin-bottom: 20px; padding: 6px 15px; }
     .menu-modal-close { top: 10px; right: 10px; width: 35px; height: 35px; font-size: 2rem;}
 }
+
+/* BADGE BAKI STOK & TEMPOH SAH PADA KAD (HANYA MUNCUL JIKA ADA DATA) */
+.card-stock-badge, .card-expiry-badge {
+    position: absolute;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 5;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.card-stock-badge { top: 15px; color: #74a779; }
+.card-expiry-badge { top: 45px; color: #e3a857; }

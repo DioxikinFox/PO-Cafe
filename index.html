@@ -9,6 +9,11 @@
 </head>
 <body>
 
+    <!-- ANNOUNCEMENT BAR DINAMIK (TAMBAHAN TANPA BUANG APA-APA) -->
+    <div id="customer-announcement-bar" style="display: none; background: #74a779; color: #000; text-align: center; padding: 10px; font-weight: 600; font-size: 0.9rem; position: sticky; top: 0; z-index: 3500;">
+        📢 <span id="announcement-content-text"></span>
+    </div>
+
     <nav class="navbar" id="navbar">
         <div class="logo-wrapper">
             <div class="logo">Peladang Outlet</div>
@@ -26,6 +31,7 @@
             <li><a href="#features">Kelebihan</a></li>
             <li><a href="#gallery">Galeri</a></li>
             <li><a href="#about">Tentang Kami</a></li>
+            <li><a href="#feedback-section">Maklum Balas</a></li>
         </ul>
     </nav>
 
@@ -46,7 +52,7 @@
         </div>
     </header>
 
-    <!-- SEKSYEN MENU BARU & PROMOSI -->
+    <!-- SEKSYEN MENU BARU & PROMOSI (ASAL DIKEKALKAN) -->
     <section id="promo" class="promo-section" data-bg="#181c1a">
         <div class="section-title">
             <span>Eksklusif & Terkini</span>
@@ -58,7 +64,7 @@
             <button class="slider-arrow left-arrow">&#10094;</button>
             
             <div class="promo-slider" id="promoSlider">
-                <!-- Kad Promo Video Ayam Gepuk (Tanpa controls, auto loop & tiada kuasa pause) -->
+                <!-- Kad Promo Video Ayam Gepuk -->
                 <div class="promo-card menu-card" data-media-type="video" data-media-src="Bahan/vdoayamgepuk.mp4">
                     <span class="promo-tag-badge">VIDEO 🎬</span>
                     <div class="card-img-wrapper">
@@ -116,7 +122,7 @@
         </div>
     </section>
 
-    <!-- MENU SECTIONS -->
+    <!-- MENU SECTIONS (STRUKTUR ASAL DIKEKALKAN SEPENUHNYA) -->
     <section id="menu" class="menu-section" data-bg="#121413">
         <div class="section-title">
             <span>Pilihan Istimewa</span>
@@ -909,6 +915,26 @@
         </div>
     </section>
 
+    <!-- SEKSYEN MAKLUM BALAS PELANGGAN (TAMBAHAN BAHARU) -->
+    <section id="feedback-section" class="menu-section" data-bg="#121413">
+        <div class="section-title">
+            <span>Suara Anda Penting</span>
+            <h2>Beri Maklum Balas</h2>
+            <div class="line"></div>
+        </div>
+        <div style="max-width: 600px; margin: 0 auto; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <form id="customer-feedback-form">
+                <label style="display:block; margin-bottom:8px; font-weight:600;">Nama Anda:</label>
+                <input type="text" id="fb-name" required style="width:100%; padding:12px; border-radius:8px; background:#121413; color:#fff; border:1px solid #334038; margin-bottom:15px; outline:none;">
+                
+                <label style="display:block; margin-bottom:8px; font-weight:600;">Maklum Balas / Cadangan:</label>
+                <textarea id="fb-message" required rows="4" style="width:100%; padding:12px; border-radius:8px; background:#121413; color:#fff; border:1px solid #334038; margin-bottom:20px; outline:none;"></textarea>
+                
+                <button type="submit" class="btn-primary" style="width:100%; text-align:center; cursor:pointer;">Hantar Maklum Balas</button>
+            </form>
+        </div>
+    </section>
+
     <!-- FOOTER -->
     <footer id="contact" class="site-footer">
         <div class="footer-top">
@@ -968,6 +994,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
