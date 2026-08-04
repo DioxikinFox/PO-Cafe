@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, onSnapshot, addDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, onSnapshot, addDoc, getDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDK5sOHxCPB2HmB9CpQSQYW20cqC9rBIjQ",
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- ANNOUNCEMENT BAR REAL-TIME DARI ADMIN (TAMBAHAN) ---
+    // --- ANNOUNCEMENT BAR REAL-TIME ---
     function monitorAnnouncement() {
         onSnapshot(doc(db, "settings", "announcement"), (docSnap) => {
             const bar = document.getElementById('customer-announcement-bar');
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 6. MENU MODAL & ANALITIK KLIK MASA NYATA (DIKEMASKINI DENGAN FIREBASE) ---
+    // --- 6. MENU MODAL & ANALITIK KLIK MASA NYATA (DIBETULKAN 100%) ---
     const menuModal = document.getElementById('menu-modal');
     const menuModalClose = document.querySelector('.menu-modal-close');
     const modalMediaContainer = document.getElementById('modal-media-container');
@@ -249,36 +249,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const allCards = document.querySelectorAll('.menu-card');
 
     allCards.forEach(card => {
-        card.addEventListener('click', async () => {
+        card.addEventListener('click', async (e) => {
+            // Halang klik jika status 'Habis'
+            if(card.style.pointerEvents === 'none') return;
+
             const mediaType = card.getAttribute('data-media-type') || 'image';
             const mediaSrc = card.getAttribute('data-media-src') || card.querySelector('img')?.src || '';
             const titleElement = card.querySelector('.card-info h3');
             const descElement = card.querySelector('.card-info .desc');
             const priceElement = card.querySelector('.card-info .price');
 
-            const title = titleElement ? titleElement.innerText : 'Menu Istimewa';
+            const title = titleElement ? titleElement.innerText.trim() : 'Menu Istimewa';
             const desc = descElement ? descElement.innerText : '';
             const price = priceElement ? priceElement.innerText : '';
 
-            // Rekod klik ke Firebase untuk analitik graf turun naik dinamik
+            // --- REKOD KLIK ANALITIK (+1) KE FIREBASE ---
             try {
-                const clickRef = doc(db, "analytics", "clicksData");
-                const clickSnap = await getDoc(clickRef);
-                let currentTotal = 1245;
-                let catCounts = { Pasta: 420, Western: 650, Gepuk: 310, Kopi: 290, Minuman: 150 };
-
-                if (clickSnap.exists()) {
-                    const cData = clickSnap.data();
-                    currentTotal = (cData.totalClicks || 1245) + (Math.floor(Math.random() * 3) + 1);
-                    if(cData.categories) catCounts = cData.categories;
-                }
-
-                await setDoc(clickRef, {
-                    totalClicks: currentTotal,
-                    categories: catCounts,
-                    topMenu: title
+                // 1. Kemaskini Jumlah Global
+                const globalClickRef = doc(db, "analytics", "clicksData");
+                await setDoc(globalClickRef, {
+                    totalClicks: increment(1),
+                    topMenu: title // Letak menu terakhir diklik
                 }, { merge: true });
-            } catch (e) {}
+
+                // 2. Kemaskini Statistik Khusus Untuk Setiap Nama Menu 
+                // (Setiap kali buka, menu spesifik ini +1)
+                const menuStatRef = doc(db, "analytics", "menuClicks");
+                await setDoc(menuStatRef, {
+                    [title]: increment(1)
+                }, { merge: true });
+                
+                console.log("Klik berjaya direkodkan untuk:", title);
+            } catch (error) {
+                console.error("Gagal merekod analitik klik:", error);
+            }
 
             if (mediaType === 'video') {
                 modalMediaContainer.innerHTML = `<video src="${mediaSrc}" autoplay muted loop playsinline></video>`;
@@ -316,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 7. SISTEM SLIDER PROMOSI (INFINITE LOOP & BLUR ASAL DIKEKALKAN) ---
+    // --- 7. SISTEM SLIDER PROMOSI (INFINITE LOOP) ---
     const promoSlider = document.getElementById('promoSlider');
     let isAutoPlaying = true;
     let autoScrollTimer;
@@ -438,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 9. BORANG MAKLUM BALAS PELANGGAN (TAMBAHAN) ---
+    // --- 9. BORANG MAKLUM BALAS PELANGGAN ---
     const feedbackForm = document.getElementById('customer-feedback-form');
     if (feedbackForm) {
         feedbackForm.addEventListener('submit', async (e) => {
@@ -457,8 +461,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Terima kasih! Maklum balas anda telah berjaya dihantar kepada pihak pengurusan PO Cafe.");
                 feedbackForm.reset();
             } catch (error) {
-                alert("Gagal menghantar maklum balas. Sila cuba lagi.");
+                console.error(error);
+                alert("Gagal menghantar maklum balas. Sila periksa Firestore Security Rules anda.");
             }
         });
     }
+
+    // --- 10. SINKRONISASI STOK & STATUS MENU DARI ADMIN (BARU) ---
+    function monitorMenuStockAndStatus() {
+        // Mengambil data dari collection "menus" (Tempat admin simpan data)
+        onSnapshot(collection(db, "menus"), (snapshot) => {
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                const menuNameAdmin = data.name; // Nama menu (Mesti sama dengan ejaan di h3 html)
+                const stock = parseInt(data.stock) || 0;
+                const status = data.status || 'Ada'; 
+
+                const allCards = document.querySelectorAll('.menu-card');
+                allCards.forEach(card => {
+                    const titleEl = card.querySelector('.card-info h3');
+                    if (titleEl && titleEl.innerText.trim() === menuNameAdmin) {
+                        
+                        // Buang badge lama jika ada
+                        const oldBadge = card.querySelector('.card-stock-badge');
+                        if (oldBadge) oldBadge.remove();
+
+                        // Logik Paparan Status / Stok
+                        if (status === 'Habis' || stock <= 0) {
+                            const badge = document.createElement('span');
+                            badge.className = 'card-stock-badge';
+                            badge.innerText = 'HABIS';
+                            badge.style.backgroundColor = '#d70f64'; // Merah
+                            card.style.opacity = '0.4';
+                            card.style.pointerEvents = 'none'; // Halang dari klik
+                            card.appendChild(badge);
+                        } else if (stock > 0 && stock <= 5) {
+                            // Jika nak tunjuk stok sikit (contoh: kurang dari 5)
+                            const badge = document.createElement('span');
+                            badge.className = 'card-stock-badge';
+                            badge.innerText = `Sisa: ${stock}`;
+                            badge.style.backgroundColor = '#e3a857'; // Oren
+                            card.style.opacity = '1';
+                            card.style.pointerEvents = 'auto';
+                            card.appendChild(badge);
+                        } else {
+                            // Stok banyak / Available - Buang efek gelap
+                            card.style.opacity = '1';
+                            card.style.pointerEvents = 'auto';
+                        }
+                    }
+                });
+            });
+        });
+    }
+    monitorMenuStockAndStatus();
 });

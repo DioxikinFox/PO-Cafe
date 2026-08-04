@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDK5sOHxCPB2HmB9CpQSQYW20cqC9rBIjQ",
@@ -17,10 +17,12 @@ const auth = getAuth(app);
 
 let semuaMenuGlobal = [];
 let semuaPromoGlobal = [];
+let chartRendered = false;
+let myChart = null; // Menyimpan instance graf supaya boleh di-update
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- KAWALAN MOD GELAP / CERAH (DARK/LIGHT THEME) ---
+    // --- KAWALAN MOD GELAP / CERAH ---
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const savedTheme = localStorage.getItem('po_cafe_admin_theme');
 
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- KAWALAN AMARAN AKHIR BULAN (7 HARI SEBELUM RESET) ---
+    // --- KAWALAN AMARAN AKHIR BULAN ---
     function checkMonthEndWarning() {
         const now = new Date();
         const year = now.getFullYear();
@@ -64,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminSections = document.querySelectorAll('.admin-section');
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const sidebarNav = document.getElementById('sidebarNav');
-    let chartRendered = false;
 
     if (hamburgerBtn && sidebarNav) {
         hamburgerBtn.addEventListener('click', () => { sidebarNav.classList.toggle('show'); });
@@ -80,16 +81,57 @@ document.addEventListener('DOMContentLoaded', () => {
             sidebarItems.forEach(li => li.classList.remove('active'));
             item.classList.add('active');
             adminSections.forEach(section => section.classList.remove('active'));
+            
             const targetId = item.getAttribute('data-tab');
-            document.getElementById(targetId).classList.add('active');
-            if (targetId === 'tab-analitik' && !chartRendered) {
-                renderGrafAnalitik();
-                chartRendered = true;
+            const targetSection = document.getElementById(targetId);
+            if(targetSection) targetSection.classList.add('active');
+
+            // Render graf SEBENAR bila masuk tab analitik
+            if (targetId === 'tab-analitik') {
+                renderGrafAnalitikSebenar();
+                tunjukJumlahKlikKeseluruhan();
             }
         });
     });
 
-    // --- 2. KAWALAN KEDAI & ANNOUNCEMENT ---
+    // --- 2. KAWALAN PENGUMUMAN (BARU DITAMBAH) ---
+    const btnSaveAnnouncement = document.getElementById('btn-save-announcement');
+    if (btnSaveAnnouncement) {
+        // Tarik data sedia ada (jika ada) ke dalam form
+        getDoc(doc(db, "settings", "announcement")).then((docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById('announcement-text').value = data.text || '';
+                document.getElementById('announcement-expiry').value = data.expiryDate || '';
+                document.getElementById('announcement-active').checked = data.isActive || false;
+            }
+        });
+
+        // Simpan pengumuman
+        btnSaveAnnouncement.addEventListener('click', async () => {
+            const text = document.getElementById('announcement-text').value.trim();
+            const expiryDate = document.getElementById('announcement-expiry').value;
+            const isActive = document.getElementById('announcement-active').checked;
+
+            if (!text && isActive) {
+                alert("Sila masukkan teks pengumuman jika ingin diaktifkan.");
+                return;
+            }
+
+            try {
+                await setDoc(doc(db, "settings", "announcement"), {
+                    text: text,
+                    expiryDate: expiryDate,
+                    isActive: isActive
+                });
+                alert("Pengumuman berjaya disimpan & dikemaskini di website pelanggan!");
+            } catch (error) {
+                alert("Gagal simpan pengumuman: " + error.message);
+            }
+        });
+    }
+
+    // --- 3. KAWALAN KEDAI ---
     const statusSelect = document.getElementById('store-status-select');
     const reasonInput = document.getElementById('cuti-reason-input');
     const btnSaveStatus = document.getElementById('btn-save-status');
@@ -108,9 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     loadStoreStatus();
 
-    statusSelect.addEventListener('change', function() {
-        reasonInput.style.display = (this.value === 'cuti') ? 'block' : 'none';
-    });
+    if(statusSelect) {
+        statusSelect.addEventListener('change', function() {
+            reasonInput.style.display = (this.value === 'cuti') ? 'block' : 'none';
+        });
+    }
 
     function updateStatusUI(status, reason) {
         if(!statusText) return;
@@ -129,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4. PENGURUSAN MENU (DENGAN FALLBACK GAMBAR JIKA ROSAK) ---
+    // --- 4. PENGURUSAN MENU (DENGAN STOK) ---
     window.fetchMenusFromDatabase = async function() {
         const semuaKategori = [
             'pasta', 'western', 'kampung', 'gepuk', 'breakfast', 'extra', 'kids', 
@@ -176,138 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     fetchMenusFromDatabase();
 
-    // --- FUNGSI AUTO-IMPORT BERSIH (PADAM DUPLIKASI LAMA & MASUKKAN LENGKAP) ---
-    const btnAutoImport = document.getElementById('btn-auto-import');
-    if (btnAutoImport) {
-        btnAutoImport.addEventListener('click', async () => {
-            if (!confirm("Tindakan ini akan memadam menu lama dan menyusun semula semua menu lengkap mengikut sub-kategori tanpa duplikasi. Teruskan?")) return;
-
-            try {
-                // 1. Padam semua menu lama di database supaya tiada duplicate
-                const snapshot = await getDocs(collection(db, "menus"));
-                for (const d of snapshot.docs) {
-                    await deleteDoc(doc(db, "menus", d.id));
-                }
-
-                // 2. Senarai menu asal yang lengkap merangkumi semua sub-kategori
-                const senaraiMenuAsal = [
-                    // Pasta
-                    { name: "Carbonara Special", category: "pasta", price: "15.00", stock: 50, image: "BahanBaru/carbonara.jpeg", isOutOfStock: false },
-                    { name: "Bolognese Meatball", category: "pasta", price: "14.00", stock: 50, image: "BahanBaru/bolognese.jpeg", isOutOfStock: false },
-                    // Western
-                    { name: "Chicken Chop Grill", category: "western", price: "18.00", stock: 40, image: "BahanBaru/chickenchop.jpeg", isOutOfStock: false },
-                    { name: "Lamb Chop Premium", category: "western", price: "25.00", stock: 30, image: "BahanBaru/lambchop.jpeg", isOutOfStock: false },
-                    // Kampung Series
-                    { name: "Nasi Goreng Kampung", category: "kampung", price: "10.00", stock: 60, image: "BahanBaru/nasigorengkampung.jpeg", isOutOfStock: false },
-                    { name: "Nasi Lemak Ayam", category: "kampung", price: "12.00", stock: 60, image: "BahanBaru/nasilemak.jpeg", isOutOfStock: false },
-                    // Ayam Gepuk
-                    { name: "Ayam Gepuk Crispy", category: "gepuk", price: "13.00", stock: 50, image: "BahanBaru/ayamgepuk.jpeg", isOutOfStock: false },
-                    { name: "Ayam Gepuk Berapi", category: "gepuk", price: "14.00", stock: 45, image: "BahanBaru/ayamgepukberapi.jpeg", isOutOfStock: false },
-                    // Breakfast & Snek
-                    { name: "Roti Bakar Telur Goyang", category: "breakfast", price: "6.00", stock: 40, image: "BahanBaru/rotibakar.jpeg", isOutOfStock: false },
-                    { name: "American Breakfast", category: "breakfast", price: "11.00", stock: 35, image: "BahanBaru/americanbreak.jpeg", isOutOfStock: false },
-                    // Extra / Tambahan
-                    { name: "Extra Cheese Sauce", category: "extra", price: "3.00", stock: 100, image: "BahanBaru/cheese.jpeg", isOutOfStock: false },
-                    // Kids Meal
-                    { name: "Nugget & Fries Kids Meal", category: "kids", price: "8.00", stock: 30, image: "BahanBaru/kidsmeal.jpeg", isOutOfStock: false },
-                    // Coffee Selection
-                    { name: "Caffe Latte", category: "coffee-selection", price: "9.00", stock: 100, image: "BahanBaru/latte.jpeg", isOutOfStock: false },
-                    { name: "Caramel Macchiato", category: "coffee-selection", price: "11.00", stock: 100, image: "BahanBaru/caramelmacchiato.jpeg", isOutOfStock: false },
-                    // Sparkling Americano
-                    { name: "Sparkling Honey Lemon", category: "sparkling-americano", price: "10.00", stock: 80, image: "BahanBaru/sparkling.jpeg", isOutOfStock: false },
-                    // Fizzy & Soda
-                    { name: "Blueberry Fizzy", category: "fizzy-soda", price: "7.00", stock: 80, image: "BahanBaru/fizzy.jpeg", isOutOfStock: false },
-                    // Non-Coffee
-                    { name: "Chocolate Premium", category: "non-coffee", price: "9.50", stock: 70, image: "BahanBaru/choc.jpeg", isOutOfStock: false },
-                    // Matcha Series
-                    { name: "Matcha Latte", category: "matcha-series", price: "10.50", stock: 60, image: "BahanBaru/matcha.jpeg", isOutOfStock: false },
-                    // Frappe
-                    { name: "Mocha Frappe", category: "frappe", price: "12.00", stock: 50, image: "BahanBaru/frappe.jpeg", isOutOfStock: false }
-                ];
-
-                // 3. Masukkan senarai baru
-                for (const menu of senaraiMenuAsal) {
-                    await addDoc(collection(db, "menus"), menu);
-                }
-
-                alert("Berjaya! Semua menu telah diimport semula dengan bersih tanpa duplikasi.");
-                fetchMenusFromDatabase();
-            } catch (error) {
-                alert("Gagal import: " + error.message);
-            }
-        });
-    }
-
-// --- FUNGSI AUTO-IMPORT PROMOSI ASAL KE FIREBASE ---
-    const btnAutoImportPromo = document.getElementById('btn-auto-import-promo');
-    if (btnAutoImportPromo) {
-        btnAutoImportPromo.addEventListener('click', async () => {
-            if (!confirm("Tindakan ini akan memadam promosi lama dan memuat naik kesemua banner promosi asal. Teruskan?")) return;
-
-            try {
-                // 1. Padam promosi lama supaya tiada duplikasi
-                const snapshot = await getDocs(collection(db, "promotions"));
-                for (const d of snapshot.docs) {
-                    await deleteDoc(doc(db, "promotions", d.id));
-                }
-
-                // 2. Senarai penuh promosi berasaskan HTML pelanggan
-                const senaraiPromoAsal = [
-                    {
-                        title: "The Most Killer Ayam Gepuk",
-                        type: "video",
-                        badge: "VIDEO 🎬",
-                        src: "Bahan/vdoayamgepuk.mp4",
-                        stock: 50,
-                        expiryDate: ""
-                    },
-                    {
-                        title: "Chicken Crispy Salad",
-                        type: "image",
-                        badge: "BARU 🌟",
-                        src: "Bahan/menubaru.jpeg",
-                        stock: 40,
-                        expiryDate: ""
-                    },
-                    {
-                        title: "Affogato Matcha Strawberry",
-                        type: "image",
-                        badge: "BARU 🌟",
-                        src: "Bahan/menubaru (2).jpeg",
-                        stock: 45,
-                        expiryDate: ""
-                    },
-                    {
-                        title: "Mantou",
-                        type: "image",
-                        badge: "BEST SELLER 🔥",
-                        src: "Bahan/menubaru (3).jpeg",
-                        stock: 60,
-                        expiryDate: ""
-                    },
-                    {
-                        title: "Bagel",
-                        type: "image",
-                        badge: "BEST SELLER 🔥",
-                        src: "Bahan/bagel.jpeg",
-                        stock: 50,
-                        expiryDate: ""
-                    }
-                ];
-
-                // 3. Masukkan ke database Firebase
-                for (const promo of senaraiPromoAsal) {
-                    await addDoc(collection(db, "promotions"), promo);
-                }
-
-                alert("Berjaya! Semua banner promosi dan video eksklusif telah diimport ke pangkalan data.");
-                fetchPromotions(); // Refresh jadual promosi admin
-            } catch (error) {
-                alert("Gagal import promosi: " + error.message);
-            }
-        });
-    }
-
     window.toggleStokMenu = async function(id, currentStatus) {
         try {
             await updateDoc(doc(db, "menus", id), { isOutOfStock: !currentStatus });
@@ -325,10 +237,12 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('menu-stock-input').value = "";
             document.getElementById('menu-img-input').value = "";
             document.getElementById('menu-cat-input').value = e.target.getAttribute('data-cat'); 
-            menuModal.style.display = 'flex';
+            if(menuModal) menuModal.style.display = 'flex';
         });
     });
-    document.getElementById('btn-close-menu-modal').addEventListener('click', () => { menuModal.style.display = 'none'; });
+    
+    const btnCloseMenuModal = document.getElementById('btn-close-menu-modal');
+    if(btnCloseMenuModal) btnCloseMenuModal.addEventListener('click', () => { menuModal.style.display = 'none'; });
 
     window.bukaModalEditMenu = function(id) {
         const item = semuaMenuGlobal.find(m => m.id === id);
@@ -340,26 +254,29 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('menu-price-input').value = item.price;
         document.getElementById('menu-stock-input').value = (item.stock !== undefined && item.stock !== null) ? item.stock : '';
         document.getElementById('menu-img-input').value = item.image || '';
-        menuModal.style.display = 'flex';
+        if(menuModal) menuModal.style.display = 'flex';
     };
 
-    document.getElementById('btn-save-menu-db').addEventListener('click', async () => {
-        const id = document.getElementById('menu-edit-id').value;
-        const name = document.getElementById('menu-name-input').value.trim();
-        const category = document.getElementById('menu-cat-input').value;
-        const price = document.getElementById('menu-price-input').value.trim();
-        const stockRaw = document.getElementById('menu-stock-input').value.trim();
-        const stock = stockRaw !== '' ? parseInt(stockRaw) : '';
-        const image = document.getElementById('menu-img-input').value.trim();
+    const btnSaveMenuDb = document.getElementById('btn-save-menu-db');
+    if(btnSaveMenuDb) {
+        btnSaveMenuDb.addEventListener('click', async () => {
+            const id = document.getElementById('menu-edit-id').value;
+            const name = document.getElementById('menu-name-input').value.trim();
+            const category = document.getElementById('menu-cat-input').value;
+            const price = document.getElementById('menu-price-input').value.trim();
+            const stockRaw = document.getElementById('menu-stock-input').value.trim();
+            const stock = stockRaw !== '' ? parseInt(stockRaw) : '';
+            const image = document.getElementById('menu-img-input').value.trim();
 
-        if (!name || !price) { alert("Nama dan harga wajib diisi!"); return; }
+            if (!name || !price) { alert("Nama dan harga wajib diisi!"); return; }
 
-        try {
-            if (id === "") { await addDoc(collection(db, "menus"), { name, category, price, stock, image, isOutOfStock: false }); } 
-            else { await updateDoc(doc(db, "menus", id), { name, category, price, stock, image }); }
-            menuModal.style.display = 'none'; fetchMenusFromDatabase();
-        } catch (e) { alert("Gagal simpan: " + e.message); }
-    });
+            try {
+                if (id === "") { await addDoc(collection(db, "menus"), { name, category, price, stock, image, isOutOfStock: false }); } 
+                else { await updateDoc(doc(db, "menus", id), { name, category, price, stock, image }); }
+                menuModal.style.display = 'none'; fetchMenusFromDatabase();
+            } catch (e) { alert("Gagal simpan: " + e.message); }
+        });
+    }
 
     window.deleteMenuDb = async function(id) {
         if (confirm("Adakah anda pasti mahu memadam menu ini?")) {
@@ -367,125 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- 5. PENGURUSAN PROMOSI ---
-    window.fetchPromotions = async function() {
-        const promoTableBody = document.getElementById('promo-table-body');
-        if (!promoTableBody) return;
-        promoTableBody.innerHTML = "";
-        semuaPromoGlobal = [];
-
-        try {
-            const querySnapshot = await getDocs(collection(db, "promotions"));
-            querySnapshot.forEach((docSnap) => {
-                const item = docSnap.data();
-                item.id = docSnap.id;
-                semuaPromoGlobal.push(item);
-                const bakiStokPromo = (item.stock !== undefined && item.stock !== null && item.stock !== '') ? item.stock : 'Tiada Had';
-
-                let countdownText = `<span style="color:#888;">Tiada Tarikh Tamat</span>`;
-                if (item.expiryDate) {
-                    const today = new Date();
-                    const expDate = new Date(item.expiryDate);
-                    const diffTime = expDate - today;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-
-                    if (diffDays < 0) { countdownText = `<strong style="color:#d70f64;">Telah Tamat!</strong>`; }
-                    else if (diffDays === 0) { countdownText = `<strong style="color:#e3a857;">Tamat Hari Ini!</strong>`; }
-                    else { countdownText = `<strong style="color:#25D366;">${diffDays} Hari Lagi</strong>`; }
-                }
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${item.type === 'video' ? '<video src="'+item.src+'" width="50" muted></video>' : '<img src="'+item.src+'" onerror="this.src=\'https://via.placeholder.com/40?text=Promo\'" width="40" height="40" style="object-fit:cover; border-radius:5px;">'}</td>
-                    <td><strong>${item.title}</strong></td>
-                    <td><span class="badge ${item.type === 'video' ? 'badge-video' : ''}">${item.badge}</span></td>
-                    <td><span style="font-weight:600;">${bakiStokPromo}</span></td>
-                    <td>${countdownText}</td>
-                    <td>
-                        <button class="btn-edit" type="button" onclick="bukaModalEditPromo('${item.id}')">Edit</button> 
-                        <button class="btn-delete" type="button" onclick="deletePromoDb('${item.id}')">Padam</button>
-                    </td>
-                `;
-                promoTableBody.appendChild(tr);
-            });
-        } catch (e) { console.error(e); }
-    };
-    fetchPromotions();
-
-    const promoModal = document.getElementById('promo-modal');
-    const btnOpenPromoModal = document.getElementById('btn-open-promo-modal');
-    if (btnOpenPromoModal) {
-        btnOpenPromoModal.addEventListener('click', () => {
-            document.getElementById('promo-edit-id').value = "";
-            document.getElementById('modal-promo-title').innerText = "Tambah Banner Promosi";
-            document.getElementById('promo-title-input').value = "";
-            document.getElementById('promo-badge-input').value = "";
-            document.getElementById('promo-src-input').value = "";
-            document.getElementById('promo-stock-input').value = "";
-            document.getElementById('promo-expiry-input').value = "";
-            promoModal.style.display = 'flex';
-        });
-    }
-    document.getElementById('btn-close-promo-modal').addEventListener('click', () => { promoModal.style.display = 'none'; });
-
-    window.bukaModalEditPromo = function(id) {
-        const item = semuaPromoGlobal.find(p => p.id === id);
-        if(!item) return;
-        document.getElementById('promo-edit-id').value = item.id;
-        document.getElementById('modal-promo-title').innerText = "Kemaskini / Edit Promosi";
-        document.getElementById('promo-title-input').value = item.title;
-        document.getElementById('promo-type-input').value = item.type;
-        document.getElementById('promo-badge-input').value = item.badge;
-        document.getElementById('promo-src-input').value = item.src;
-        document.getElementById('promo-stock-input').value = (item.stock !== undefined && item.stock !== null) ? item.stock : '';
-        document.getElementById('promo-expiry-input').value = item.expiryDate || '';
-        promoModal.style.display = 'flex';
-    };
-
-    document.getElementById('btn-save-promo-db').addEventListener('click', async () => {
-        const id = document.getElementById('promo-edit-id').value;
-        const title = document.getElementById('promo-title-input').value.trim();
-        const type = document.getElementById('promo-type-input').value;
-        const badge = document.getElementById('promo-badge-input').value.trim();
-        const src = document.getElementById('promo-src-input').value.trim();
-        const stockRaw = document.getElementById('promo-stock-input').value.trim();
-        const stock = stockRaw !== '' ? parseInt(stockRaw) : '';
-        const expiryDate = document.getElementById('promo-expiry-input').value;
-
-        if (!title || !src) { alert("Sila isi tajuk dan pautan fail media."); return; }
-
-        try {
-            if(id === "") {
-                await addDoc(collection(db, "promotions"), { title, type, badge, src, stock, expiryDate });
-            } else {
-                await updateDoc(doc(db, "promotions", id), { title, type, badge, src, stock, expiryDate });
-            }
-            promoModal.style.display = 'none';
-            fetchPromotions();
-        } catch (e) { alert("Gagal simpan promosi."); }
-    });
-
-    window.deletePromoDb = async function(id) {
-        if (confirm("Padam promosi ini?")) { await deleteDoc(doc(db, "promotions", id)); fetchPromotions(); }
-    };
-
-    // --- 6. ANALITIK BULANAN ---
-    const now = new Date();
-    const currentMonthYear = now.toLocaleString('ms-MY', { month: 'long', year: 'numeric' });
-    const monthLabelEl = document.getElementById('current-month-label');
-    if(monthLabelEl) monthLabelEl.innerText = currentMonthYear;
-
-    const savedMonth = localStorage.getItem('po_cafe_active_month');
-    if (savedMonth !== currentMonthYear) {
-        localStorage.setItem('po_cafe_active_month', currentMonthYear);
-        localStorage.setItem('po_cafe_monthly_clicks', '0');
-    }
-
-    const totalClicks = localStorage.getItem('po_cafe_monthly_clicks') || '1,245';
-    const statClicksEl = document.getElementById('stat-clicks');
-    if(statClicksEl) statClicksEl.innerText = totalClicks;
-
-    // --- 7. TUKAR SUB-TAB ---
+    // --- 5. TUKAR SUB-TAB ---
     const subTabBtns = document.querySelectorAll('.sub-tab-btn');
     const subCatContents = document.querySelectorAll('.subcat-content');
 
@@ -498,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 8. LOG MASUK & ENTER ---
+    // --- 6. LOG MASUK & LOUT ---
     window.loginKhas = async function() {
         const email = document.getElementById('admin-email').value.trim();
         const pass = document.getElementById('admin-pass').value.trim();
@@ -538,23 +337,76 @@ document.addEventListener('DOMContentLoaded', () => {
         try { await signOut(auth); } catch (e) {}
         setTimeout(() => window.location.reload(), 400);
     }
-});
 
-function renderGrafAnalitik() {
-    const canvasEl = document.getElementById('kategoriChart');
-    if (!canvasEl) return;
-    const ctx = canvasEl.getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Pasta', 'Western', 'Ayam Gepuk', 'Kopi', 'Minuman Segar'],
-            datasets: [{
-                label: 'Jumlah Klik Bulan Ini',
-                data: [420, 650, 310, 290, 150],
-                backgroundColor: ['#74a779', '#a67c52', '#3d5a80', '#e3a857', '#d70f64'],
-                borderRadius: 6
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-}
+    // --- 7. FUNGSI RENDER GRAF ANALITIK SEBENAR (DARI FIREBASE) ---
+    async function renderGrafAnalitikSebenar() {
+        const canvasEl = document.getElementById('kategoriChart');
+        if (!canvasEl) return;
+
+        try {
+            // Tarik data klik menu sebenar dari database
+            const docSnap = await getDoc(doc(db, "analytics", "menuClicks"));
+            let labels = [];
+            let dataArr = [];
+
+            if (docSnap.exists()) {
+                const clicksData = docSnap.data();
+                
+                // Sort data untuk dapatkan "Top Menu Paling Banyak Klik"
+                const sortedMenu = Object.entries(clicksData).sort((a, b) => b[1] - a[1]);
+                
+                // Ambil top 5 atau 6 menu sahaja untuk dipaparkan pada graf
+                const topMenu = sortedMenu.slice(0, 6);
+                
+                labels = topMenu.map(item => item[0]); // Nama menu
+                dataArr = topMenu.map(item => item[1]); // Jumlah klik
+            } else {
+                labels = ['Tiada Klik Direkodkan'];
+                dataArr = [0];
+            }
+
+            const ctx = canvasEl.getContext('2d');
+            
+            // Padam graf lama jika wujud untuk elak 'glitch' pertindihan
+            if (myChart) { myChart.destroy(); }
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Jumlah Klik Sebenar Pelanggan',
+                        data: dataArr,
+                        backgroundColor: ['#74a779', '#a67c52', '#3d5a80', '#e3a857', '#d70f64', '#1c221e'],
+                        borderRadius: 6
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error("Gagal memuat naik graf:", error);
+        }
+    }
+
+    // --- 8. TUNJUK JUMLAH KLIK KESELURUHAN (DARI FIREBASE) ---
+    async function tunjukJumlahKlikKeseluruhan() {
+        const statClicksEl = document.getElementById('stat-clicks');
+        if(!statClicksEl) return;
+        
+        try {
+            const docSnap = await getDoc(doc(db, "analytics", "clicksData"));
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                statClicksEl.innerText = data.totalClicks || 0;
+            } else {
+                statClicksEl.innerText = "0";
+            }
+        } catch (e) { console.error(e); }
+    }
+});
