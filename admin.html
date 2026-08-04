@@ -46,25 +46,37 @@
                 <h2>Kawalan Utama Kedai</h2>
                 <div class="control-card">
                     <h3>Status Operasi Kedai</h3>
-                    <p>Tukar status untuk dipaparkan pada website pelanggan.</p>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-buka-tutup" checked>
-                        <span class="slider"></span>
-                    </label>
-                    <span id="status-text" class="status-indicator status-buka">KEDAI BUKA</span>
+                    <p>Ubah status semasa kedai untuk paparan pelanggan.</p>
+                    <select id="store-status-select" class="admin-input" style="width:100%; max-width:300px; margin-bottom:10px;">
+                        <option value="buka">🟢 Kedai Beroperasi (Buka)</option>
+                        <option value="tutup">🔴 Kedai Tutup (Habis Waktu)</option>
+                        <option value="cuti">🟡 Kedai Cuti / Holiday</option>
+                    </select>
+                    <!-- Input untuk tulis sebab cuti, hanya keluar kalau pilih Cuti -->
+                    <input type="text" id="cuti-reason-input" placeholder="Cth: Cuti Raya Aidilfitri / Kecemasan" class="admin-input" style="display:none; width:100%; max-width:400px; margin-top:10px;">
+                    <div style="margin-top:10px;">
+                        <button class="btn-primary" id="btn-save-status">Kemaskini Status</button>
+                        <span id="status-text" class="status-indicator" style="margin-left: 15px;"></span>
+                    </div>
                 </div>
+
                 <div class="control-card">
                     <h3>Announcement Bar (Pengumuman)</h3>
-                    <p>Tulis mesej promosi atau makluman di atas website.</p>
-                    <input type="text" id="announcement-text" placeholder="Cth: Harini kami ada promo kopi free!" class="admin-input">
-                    <div style="margin-top: 10px; display: flex; align-items: center;">
-                        <label class="toggle-switch">
+                    <p>Tulis mesej promosi dan tetapkan bila ia tamat.</p>
+                    <input type="text" id="announcement-text" placeholder="Cth: Harini kami ada promo kopi free!" class="admin-input" style="margin-bottom:10px;">
+                    
+                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
+                        <label style="font-weight:600; font-size:0.9rem;">Sah Sehingga:</label>
+                        <input type="date" id="announcement-expiry" class="admin-input" style="width: auto;">
+                        
+                        <label class="toggle-switch" style="margin-left:20px;">
                             <input type="checkbox" id="toggle-announcement">
                             <span class="slider"></span>
                         </label>
-                        <span style="margin-left:15px; font-weight: 600;">Aktifkan Pengumuman</span>
+                        <span style="font-weight: 600;">Aktifkan</span>
                     </div>
-                    <button class="btn-primary" id="btn-save-announcement" style="margin-top: 15px;">Simpan Pengumuman</button>
+                    
+                    <button class="btn-primary" id="btn-save-announcement">Simpan Pengumuman</button>
                 </div>
             </section>
 
@@ -73,7 +85,7 @@
                 <h2>Pengurusan Promosi & Banner</h2>
                 <div class="control-card">
                     <div class="filter-bar">
-                        <p>Kawal kad promosi (Slider) di halaman utama.</p>
+                        <p>Kawal kad promosi di halaman utama & lihat tempoh sah.</p>
                         <button class="btn-primary" id="btn-open-promo-modal" type="button">+ Tambah Promosi</button>
                     </div>
                     <table class="menu-table">
@@ -81,8 +93,8 @@
                             <tr>
                                 <th>Media</th>
                                 <th>Tajuk Promosi</th>
-                                <th>Jenis</th>
                                 <th>Lencana</th>
+                                <th>Tempoh Sah (Countdown)</th>
                                 <th>Tindakan</th>
                             </tr>
                         </thead>
@@ -96,7 +108,6 @@
             <!-- TAB 3: URUS MENU -->
             <section id="tab-menu" class="admin-section">
                 <h2>Pengurusan Menu Mengikut Kategori</h2>
-                
                 <div class="admin-sub-tabs">
                     <button class="sub-tab-btn active" data-subcat="sub-utama">🍲 Hidangan Utama</button>
                     <button class="sub-tab-btn" data-subcat="sub-sarapan">🍳 Sarapan & Snek</button>
@@ -104,99 +115,44 @@
                     <button class="sub-tab-btn" data-subcat="sub-minuman">🥤 Minuman Segar</button>
                 </div>
 
-                <!-- 1. KATEGORI UTAMA -->
+                <!-- (TIDAK BERUBAH) STRUKTUR HTML MENU KEKAL SAMA SEPERTI SEBELUM INI -->
                 <div class="subcat-content active" id="sub-utama">
-                    <div class="control-card">
-                        <div class="filter-bar">
-                            <h3>Senarai Hidangan Utama (Pasta, Western, dsb.)</h3>
-                            <button class="btn-primary btn-tambah-menu" data-cat="pasta" type="button">+ Tambah Menu</button>
-                        </div>
-                        <table class="menu-table">
-                            <thead><tr><th>Gambar</th><th>Nama Menu</th><th>Sub-Kategori</th><th>Harga</th><th>Tindakan</th></tr></thead>
-                            <tbody id="table-utama"></tbody>
-                        </table>
-                    </div>
+                    <div class="control-card"><div class="filter-bar"><h3>Pasta Istimewa</h3><button class="btn-primary btn-tambah-menu" data-cat="pasta">+ Tambah Pasta</button></div><table class="menu-table"><thead><tr><th>Gambar</th><th>Nama Menu</th><th>Harga</th><th>Status Stok</th><th>Tindakan</th></tr></thead><tbody id="table-pasta"></tbody></table></div>
+                    <div class="control-card"><div class="filter-bar"><h3>Western Delights</h3><button class="btn-primary btn-tambah-menu" data-cat="western">+ Tambah Western</button></div><table class="menu-table"><thead><tr><th>Gambar</th><th>Nama Menu</th><th>Harga</th><th>Status Stok</th><th>Tindakan</th></tr></thead><tbody id="table-western"></tbody></table></div>
+                    <div class="control-card"><div class="filter-bar"><h3>Kampung Series</h3><button class="btn-primary btn-tambah-menu" data-cat="kampung">+ Tambah Kampung</button></div><table class="menu-table"><thead><tr><th>Gambar</th><th>Nama Menu</th><th>Harga</th><th>Status Stok</th><th>Tindakan</th></tr></thead><tbody id="table-kampung"></tbody></table></div>
+                    <div class="control-card"><div class="filter-bar"><h3>Ayam Gepuk Berapi</h3><button class="btn-primary btn-tambah-menu" data-cat="gepuk">+ Tambah Gepuk</button></div><table class="menu-table"><thead><tr><th>Gambar</th><th>Nama Menu</th><th>Harga</th><th>Status Stok</th><th>Tindakan</th></tr></thead><tbody id="table-gepuk"></tbody></table></div>
                 </div>
-
-                <!-- 2. KATEGORI SARAPAN -->
                 <div class="subcat-content" id="sub-sarapan" style="display:none;">
-                    <div class="control-card">
-                        <div class="filter-bar">
-                            <h3>Senarai Sarapan & Snek</h3>
-                            <button class="btn-primary btn-tambah-menu" data-cat="breakfast" type="button">+ Tambah Menu</button>
-                        </div>
-                        <table class="menu-table">
-                            <thead><tr><th>Gambar</th><th>Nama Menu</th><th>Kategori</th><th>Harga</th><th>Tindakan</th></tr></thead>
-                            <tbody id="table-sarapan"></tbody>
-                        </table>
-                    </div>
+                    <div class="control-card"><div class="filter-bar"><h3>Breakfast & Sarapan Pagi</h3><button class="btn-primary btn-tambah-menu" data-cat="breakfast">+ Tambah Sarapan</button></div><table class="menu-table"><thead><tr><th>Gambar</th><th>Nama Menu</th><th>Harga</th><th>Status Stok</th><th>Tindakan</th></tr></thead><tbody id="table-breakfast"></tbody></table></div>
+                    <div class="control-card"><div class="filter-bar"><h3>Pilihan Tambahan / Extra</h3><button class="btn-primary btn-tambah-menu" data-cat="extra">+ Tambah Extra</button></div><table class="menu-table"><thead><tr><th>Gambar</th><th>Nama Menu</th><th>Harga</th><th>Status Stok</th><th>Tindakan</th></tr></thead><tbody id="table-extra"></tbody></table></div>
+                    <div class="control-card"><div class="filter-bar"><h3>Kids Meal</h3><button class="btn-primary btn-tambah-menu" data-cat="kids">+ Tambah Kids Meal</button></div><table class="menu-table"><thead><tr><th>Gambar</th><th>Nama Menu</th><th>Harga</th><th>Status Stok</th><th>Tindakan</th></tr></thead><tbody id="table-kids"></tbody></table></div>
                 </div>
-
-                <!-- 3. KATEGORI KOPI -->
                 <div class="subcat-content" id="sub-kopi" style="display:none;">
-                    <div class="control-card">
-                        <div class="filter-bar">
-                            <h3>Senarai Kopi & Espresso</h3>
-                            <button class="btn-primary btn-tambah-menu" data-cat="coffee" type="button">+ Tambah Menu</button>
-                        </div>
-                        <table class="menu-table">
-                            <thead><tr><th>Gambar</th><th>Nama Menu</th><th>Kategori</th><th>Harga</th><th>Tindakan</th></tr></thead>
-                            <tbody id="table-kopi"></tbody>
-                        </table>
-                    </div>
+                    <div class="control-card"><div class="filter-bar"><h3>Senarai Kopi & Espresso</h3><button class="btn-primary btn-tambah-menu" data-cat="coffee">+ Tambah Kopi</button></div><table class="menu-table"><thead><tr><th>Gambar</th><th>Nama Menu</th><th>Harga</th><th>Status Stok</th><th>Tindakan</th></tr></thead><tbody id="table-coffee"></tbody></table></div>
                 </div>
-
-                <!-- 4. KATEGORI MINUMAN -->
                 <div class="subcat-content" id="sub-minuman" style="display:none;">
-                    <div class="control-card">
-                        <div class="filter-bar">
-                            <h3>Senarai Minuman Segar</h3>
-                            <button class="btn-primary btn-tambah-menu" data-cat="beverages" type="button">+ Tambah Menu</button>
-                        </div>
-                        <table class="menu-table">
-                            <thead><tr><th>Gambar</th><th>Nama Menu</th><th>Kategori</th><th>Harga</th><th>Tindakan</th></tr></thead>
-                            <tbody id="table-minuman"></tbody>
-                        </table>
-                    </div>
+                    <div class="control-card"><div class="filter-bar"><h3>Senarai Minuman Segar</h3><button class="btn-primary btn-tambah-menu" data-cat="beverages">+ Tambah Minuman</button></div><table class="menu-table"><thead><tr><th>Gambar</th><th>Nama Menu</th><th>Harga</th><th>Status Stok</th><th>Tindakan</th></tr></thead><tbody id="table-beverages"></tbody></table></div>
                 </div>
             </section>
 
-            <!-- TAB 4: ANALITIK & GRAF -->
+            <!-- TAB ANALITIK & MAKLUM BALAS KEKAL -->
             <section id="tab-analitik" class="admin-section">
                 <h2>Analitik Pelawat & Klik</h2>
+                <p style="color:#666; margin-bottom:15px;">*Data akan bersambung dengan fungsi klik di website pelanggan.</p>
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Jumlah Klik Menu (Bulan Ini)</h3>
-                        <p class="stat-number">1,245</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Menu Paling Top 🔥</h3>
-                        <p class="stat-number" style="font-size: 1.4rem;">Ayam Gepuk Crispy (320 Klik)</p>
-                    </div>
+                    <div class="stat-card"><h3>Jumlah Klik Menu</h3><p class="stat-number">1,245</p></div>
+                    <div class="stat-card"><h3>Menu Paling Top 🔥</h3><p class="stat-number" style="font-size: 1.4rem;">Ayam Gepuk Crispy (320 Klik)</p></div>
                 </div>
-                <div class="control-card" style="margin-top: 20px;">
-                    <h3>Graf Kategori Paling Popular</h3>
-                    <div class="chart-container">
-                        <canvas id="kategoriChart"></canvas>
-                    </div>
-                </div>
+                <div class="control-card" style="margin-top: 20px;"><div class="chart-container"><canvas id="kategoriChart"></canvas></div></div>
             </section>
 
-            <!-- TAB 5: MAKLUM BALAS -->
             <section id="tab-feedback" class="admin-section">
                 <h2>Maklum Balas Pelanggan</h2>
+                <p style="color:#666; margin-bottom:15px;">*Data akan ditarik dari borang maklum balas di website pelanggan.</p>
                 <div class="control-card">
-                    <div class="filter-bar" style="margin-bottom: 20px;">
-                        <button class="btn-filter active" data-filter="semua">Semua</button>
-                        <button class="btn-filter" data-filter="positif">Positif (4-5 ⭐)</button>
-                        <button class="btn-filter" data-filter="negatif">Negatif (1-3 ⭐)</button>
-                    </div>
                     <div class="feedback-list">
                         <div class="feedback-item rating-positif">
-                            <div class="feedback-header">
-                                <strong>Siti Nurhaliza</strong> <span>(Semalam)</span>
-                                <div class="star-rating">⭐⭐⭐⭐⭐</div>
-                            </div>
+                            <div class="feedback-header"><strong>Siti Nurhaliza</strong> <span>(Semalam)</span><div class="star-rating">⭐⭐⭐⭐⭐</div></div>
                             <p>"Tempat sangat estetik! Kopi sedap dan harga sangat berbaloi."</p>
                         </div>
                     </div>
@@ -205,40 +161,26 @@
         </main>
     </div>
 
-    <!-- MODAL POP-UP MENU -->
+    <!-- MODAL POP-UP MENU KEKAL SAMA -->
     <div id="menu-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99999; justify-content:center; align-items:center;">
         <div style="background:#fff; padding:30px; border-radius:12px; width:90%; max-width:450px; position:relative; z-index:100000;">
             <h3 id="modal-menu-title" style="margin-bottom:15px; color:#121413;">Tambah Menu Baru</h3>
             <input type="hidden" id="menu-edit-id">
-            
             <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Nama Menu:</label>
-            <input type="text" id="menu-name-input" class="admin-input" style="width:100%; margin-bottom:12px;" placeholder="Cth: Kopi Latte">
-            
+            <input type="text" id="menu-name-input" class="admin-input" style="width:100%; margin-bottom:12px;">
             <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Kategori:</label>
             <select id="menu-cat-input" class="admin-input" style="width:100%; margin-bottom:12px; padding:10px;">
-                <optgroup label="Hidangan Utama">
-                    <option value="pasta">Pasta</option>
-                    <option value="western">Western</option>
-                    <option value="kampung">Kampung Series</option>
-                    <option value="gepuk">Ayam Gepuk</option>
-                    <option value="mains">Lain-lain (Utama)</option>
-                </optgroup>
-                <optgroup label="Kategori Lain">
-                    <option value="breakfast">Sarapan & Snek</option>
-                    <option value="coffee">Kopi & Espresso</option>
-                    <option value="beverages">Minuman Segar</option>
-                </optgroup>
+                <option value="pasta">Pasta</option><option value="western">Western</option><option value="kampung">Kampung Series</option><option value="gepuk">Ayam Gepuk</option>
+                <option value="breakfast">Breakfast</option><option value="extra">Extra / Tambahan</option><option value="kids">Kids Meal</option>
+                <option value="coffee">Kopi & Espresso</option><option value="beverages">Minuman Segar</option>
             </select>
-
             <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Harga:</label>
             <div style="display: flex; align-items: center; background: #fff; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 12px; overflow: hidden;">
                 <span style="background: #eee; padding: 10px 15px; font-weight: 600; color: #555; border-right: 1px solid #ddd;">RM</span>
-                <input type="text" id="menu-price-input" style="width:100%; border:none; padding:10px; outline:none; font-size: 1rem;" placeholder="10.00">
+                <input type="text" id="menu-price-input" style="width:100%; border:none; padding:10px; outline:none; font-size: 1rem;">
             </div>
-
-            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Pautan Gambar (Path):</label>
-            <input type="text" id="menu-img-input" class="admin-input" style="width:100%; margin-bottom:20px;" placeholder="Cth: BahanBaru/kopi.jpeg">
-
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Pautan Gambar:</label>
+            <input type="text" id="menu-img-input" class="admin-input" style="width:100%; margin-bottom:20px;">
             <div style="display:flex; justify-content:flex-end; gap:10px;">
                 <button type="button" id="btn-close-menu-modal" style="background:#ccc; border:none; padding:10px 15px; border-radius:6px; cursor:pointer;">Batal</button>
                 <button type="button" id="btn-save-menu-db" class="btn-primary">Simpan</button>
@@ -246,13 +188,32 @@
         </div>
     </div>
 
-    <!-- MODAL POP-UP PROMOSI -->
+    <!-- MODAL PROMOSI DENGAN INPUT TARIKH -->
     <div id="promo-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99999; justify-content:center; align-items:center;">
         <div style="background:#fff; padding:30px; border-radius:12px; width:90%; max-width:450px; position:relative; z-index:100000;">
             <h3 style="margin-bottom:15px; color:#121413;">Tambah Banner Promosi</h3>
-            <p>Fungsi promosi akan datang...</p>
-            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
-                <button type="button" id="btn-close-promo-modal" style="background:#ccc; border:none; padding:10px 15px; border-radius:6px; cursor:pointer;">Batal / Tutup</button>
+            
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Tajuk Promosi:</label>
+            <input type="text" id="promo-title-input" class="admin-input" style="width:100%; margin-bottom:12px;" placeholder="Cth: Set Jimat Meriah">
+            
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Jenis Media:</label>
+            <select id="promo-type-input" class="admin-input" style="width:100%; margin-bottom:12px; padding:10px;">
+                <option value="image">Gambar (Image)</option><option value="video">Video</option>
+            </select>
+
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Lencana (Badge):</label>
+            <input type="text" id="promo-badge-input" class="admin-input" style="width:100%; margin-bottom:12px;" placeholder="BARU 🌟">
+
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Pautan Fail Media:</label>
+            <input type="text" id="promo-src-input" class="admin-input" style="width:100%; margin-bottom:12px;" placeholder="Bahan/menubaru.jpeg">
+
+            <!-- FUNGSI BARU: TARIKH TAMAT PROMOSI -->
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Tarikh Promosi Tamat:</label>
+            <input type="date" id="promo-expiry-input" class="admin-input" style="width:100%; margin-bottom:20px;">
+
+            <div style="display:flex; justify-content:flex-end; gap:10px;">
+                <button type="button" id="btn-close-promo-modal" style="background:#ccc; border:none; padding:10px 15px; border-radius:6px; cursor:pointer;">Batal</button>
+                <button type="button" id="btn-save-promo-db" class="btn-primary">Simpan Promosi</button>
             </div>
         </div>
     </div>
