@@ -93,8 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            const normalMenuCards = document.querySelectorAll('.menu-card:not(.promo-card)');
-            normalMenuCards.forEach(card => card.style.display = 'block');
+            // Tunjukkan balik semua kad kecuali yang disorok sistem (kerana ditukar nama)
+            document.querySelectorAll('.menu-card:not(.promo-card):not(.deleted-by-admin)').forEach(card => card.style.display = 'block');
         });
     });
 
@@ -129,90 +129,77 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 3. SEARCH MENU YANG BERSIH & TEPAT ---
+    // --- 3. FUNGSI CARIAN (SEARCH) YANG DIKEMASKINI ---
     const searchInput = document.getElementById('searchInput');
-    const normalMenuCards = document.querySelectorAll('.menu-card:not(.promo-card)');
-    const allSubSections = document.querySelectorAll('.sub-section');
     
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            const filterText = e.target.value.toLowerCase().trim();
+    function applySearchFilter() {
+        if(!searchInput) return;
+        const filterText = searchInput.value.toLowerCase().trim();
+        
+        // Jangan libatkan kad yang dipadam/disorok oleh Admin
+        const normalMenuCards = document.querySelectorAll('.menu-card:not(.promo-card):not(.deleted-by-admin)');
+        const allSubSections = document.querySelectorAll('.sub-section');
+        
+        if (filterText !== '') {
+            categoryWrappers.forEach(wrapper => wrapper.classList.add('active'));
+            allSubSections.forEach(sec => {
+                sec.style.display = 'block';
+                sec.classList.add('active');
+            });
             
-            if (filterText !== '') {
-                categoryWrappers.forEach(wrapper => wrapper.classList.add('active'));
-                allSubSections.forEach(sec => {
-                    sec.style.display = 'block';
-                    sec.classList.add('active');
-                });
+            normalMenuCards.forEach(card => {
+                const titleEl = card.querySelector('h3');
+                const descEl = card.querySelector('.desc');
+                const titleText = titleEl ? titleEl.textContent.toLowerCase() : '';
+                const descText = descEl ? descEl.textContent.toLowerCase() : '';
                 
-                normalMenuCards.forEach(card => {
-                    const titleEl = card.querySelector('h3');
-                    const descEl = card.querySelector('.desc');
-                    const titleText = titleEl ? titleEl.textContent.toLowerCase() : '';
-                    const descText = descEl ? descEl.textContent.toLowerCase() : '';
-                    
-                    if (titleText.includes(filterText) || descText.includes(filterText)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
+                if (titleText.includes(filterText) || descText.includes(filterText)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            allSubSections.forEach(sec => {
+                const cardsInSec = sec.querySelectorAll('.menu-card:not(.deleted-by-admin)');
+                let hasVisibleCard = false;
+                cardsInSec.forEach(card => {
+                    if (card.style.display === 'block') {
+                        hasVisibleCard = true;
                     }
                 });
 
-                allSubSections.forEach(sec => {
-                    const cardsInSec = sec.querySelectorAll('.menu-card');
-                    let hasVisibleCard = false;
-                    cardsInSec.forEach(card => {
-                        if (card.style.display === 'block') {
-                            hasVisibleCard = true;
-                        }
-                    });
-
-                    if (hasVisibleCard) {
-                        sec.style.display = 'block';
-                    } else {
-                        sec.style.display = 'none';
-                    }
-                });
-
-            } else {
-                const activeMasterTab = document.querySelector('.master-tabs .tab-btn.active');
-                const targetMaster = activeMasterTab ? activeMasterTab.getAttribute('data-target') : 'cat-mains';
-                
-                categoryWrappers.forEach(wrapper => {
-                    const isActive = wrapper.id === targetMaster;
-                    wrapper.classList.toggle('active', isActive);
-                    if (isActive) {
-                        const subTabs = wrapper.querySelectorAll('.sub-tab-btn');
-                        subTabs.forEach((st, idx) => {
-                            st.classList.toggle('active', idx === 0);
-                        });
-                        wrapper.querySelectorAll('.sub-section').forEach(sec => {
-                            sec.style.display = 'block';
-                            sec.classList.add('active');
-                        });
-                    }
-                });
-
-                normalMenuCards.forEach(card => card.style.display = 'block');
-                allSubSections.forEach(sec => {
+                if (hasVisibleCard) {
                     sec.style.display = 'block';
-                    sec.classList.add('active');
-                });
-            }
-        });
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+
+        } else {
+            const activeMasterTab = document.querySelector('.master-tabs .tab-btn.active');
+            if(activeMasterTab) activeMasterTab.click(); 
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', applySearchFilter);
     }
 
     // --- 4. SCROLL EFFECT & DYNAMIC BACKGROUND ---
     const navbar = document.getElementById('navbar');
+    const stickyWrap = document.getElementById('main-header-wrap');
     const sections = document.querySelectorAll('section, header, footer');
 
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
             document.body.classList.add('scrolled');
+            if(stickyWrap) stickyWrap.style.boxShadow = "0 4px 20px rgba(0,0,0,0.6)";
         } else {
             navbar.classList.remove('scrolled');
             document.body.classList.remove('scrolled');
+            if(stickyWrap) stickyWrap.style.boxShadow = "0 4px 20px rgba(0,0,0,0.4)";
         }
 
         let currentBg = 'var(--bg-color)'; 
@@ -229,16 +216,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const closeBtn = document.querySelector('.lightbox-close');
-    const galleryItems = document.querySelectorAll('.gallery-item img');
-
-    galleryItems.forEach(img => {
-        img.addEventListener('click', () => {
-            lightboxImg.src = img.src; 
-            lightbox.classList.add('show');
-        });
+    
+    // Kita guna event delegation untuk galeri supaya imej baharu dari admin pun boleh diklik
+    document.addEventListener('click', (e) => {
+        const img = e.target.closest('.gallery-item img');
+        if (img) {
+            if(lightboxImg) lightboxImg.src = img.src; 
+            if(lightbox) lightbox.classList.add('show');
+        }
     });
 
-    // --- 6. MENU MODAL & ANALITIK KLIK MASA NYATA (DIBETULKAN 100%) ---
+    // --- 6. MENU MODAL & ANALITIK KLIK (EVENT DELEGATION) ---
     const menuModal = document.getElementById('menu-modal');
     const menuModalClose = document.querySelector('.menu-modal-close');
     const modalMediaContainer = document.getElementById('modal-media-container');
@@ -246,61 +234,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalDesc = document.getElementById('modal-desc');
     const modalPrice = document.getElementById('modal-price');
 
-    const allCards = document.querySelectorAll('.menu-card');
+    document.addEventListener('click', async (e) => {
+        const card = e.target.closest('.menu-card');
+        if (!card) return;
+        if(card.style.pointerEvents === 'none') return;
 
-    allCards.forEach(card => {
-        card.addEventListener('click', async (e) => {
-            // Halang klik jika status 'Habis'
-            if(card.style.pointerEvents === 'none') return;
+        const mediaType = card.getAttribute('data-media-type') || 'image';
+        const mediaSrc = card.getAttribute('data-media-src') || card.querySelector('img')?.src || '';
+        const titleElement = card.querySelector('.card-info h3');
+        const descElement = card.querySelector('.card-info .desc');
+        const priceElement = card.querySelector('.card-info .price');
 
-            const mediaType = card.getAttribute('data-media-type') || 'image';
-            const mediaSrc = card.getAttribute('data-media-src') || card.querySelector('img')?.src || '';
-            const titleElement = card.querySelector('.card-info h3');
-            const descElement = card.querySelector('.card-info .desc');
-            const priceElement = card.querySelector('.card-info .price');
+        const title = titleElement ? titleElement.innerText.trim() : 'Menu Istimewa';
+        const desc = descElement ? descElement.innerText : '';
+        const price = priceElement ? priceElement.innerText : '';
 
-            const title = titleElement ? titleElement.innerText.trim() : 'Menu Istimewa';
-            const desc = descElement ? descElement.innerText : '';
-            const price = priceElement ? priceElement.innerText : '';
+        // REKOD KLIK KE FIREBASE
+        try {
+            const globalClickRef = doc(db, "analytics", "clicksData");
+            await setDoc(globalClickRef, { totalClicks: increment(1), topMenu: title }, { merge: true });
 
-            // --- REKOD KLIK ANALITIK (+1) KE FIREBASE ---
-            try {
-                // 1. Kemaskini Jumlah Global
-                const globalClickRef = doc(db, "analytics", "clicksData");
-                await setDoc(globalClickRef, {
-                    totalClicks: increment(1),
-                    topMenu: title // Letak menu terakhir diklik
-                }, { merge: true });
+            const menuStatRef = doc(db, "analytics", "menuClicks");
+            await setDoc(menuStatRef, { [title]: increment(1) }, { merge: true });
+        } catch (error) {}
 
-                // 2. Kemaskini Statistik Khusus Untuk Setiap Nama Menu 
-                // (Setiap kali buka, menu spesifik ini +1)
-                const menuStatRef = doc(db, "analytics", "menuClicks");
-                await setDoc(menuStatRef, {
-                    [title]: increment(1)
-                }, { merge: true });
-                
-                console.log("Klik berjaya direkodkan untuk:", title);
-            } catch (error) {
-                console.error("Gagal merekod analitik klik:", error);
-            }
+        if (mediaType === 'video') {
+            modalMediaContainer.innerHTML = `<video src="${mediaSrc}" autoplay muted loop playsinline></video>`;
+        } else {
+            modalMediaContainer.innerHTML = `<img src="${mediaSrc}" alt="${title}" onerror="this.src='https://via.placeholder.com/400?text=Imej+Tiada'">`;
+        }
 
-            if (mediaType === 'video') {
-                modalMediaContainer.innerHTML = `<video src="${mediaSrc}" autoplay muted loop playsinline></video>`;
-            } else {
-                modalMediaContainer.innerHTML = `<img src="${mediaSrc}" alt="${title}">`;
-            }
+        modalTitle.innerText = title;
+        modalDesc.innerText = desc;
+        modalPrice.innerText = price;
 
-            modalTitle.innerText = title;
-            modalDesc.innerText = desc;
-            modalPrice.innerText = price;
-
-            menuModal.classList.add('show');
-            document.body.style.overflow = 'hidden'; 
-        });
+        menuModal.classList.add('show');
+        document.body.style.overflow = 'hidden'; 
     });
 
     if (closeBtn && lightbox) closeBtn.addEventListener('click', () => lightbox.classList.remove('show'));
-    
     if (menuModalClose && menuModal) {
         menuModalClose.addEventListener('click', () => {
             menuModal.classList.remove('show');
@@ -309,7 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'auto';
         });
     }
-
     window.addEventListener('click', (e) => {
         if (e.target === lightbox) lightbox.classList.remove('show');
         if (e.target === menuModal) {
@@ -331,91 +302,48 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if(totalOriginal > 0) {
             const firstCard = originalCards[0];
-            
             originalCards.forEach(card => {
-                let clone = card.cloneNode(true);
-                clone.classList.remove('js-focused');
-                promoSlider.insertBefore(clone, firstCard);
+                let clone = card.cloneNode(true); clone.classList.remove('js-focused'); promoSlider.insertBefore(clone, firstCard);
             });
-            
             originalCards.forEach(card => {
-                let clone = card.cloneNode(true);
-                clone.classList.remove('js-focused');
-                promoSlider.appendChild(clone);
+                let clone = card.cloneNode(true); clone.classList.remove('js-focused'); promoSlider.appendChild(clone);
             });
 
             const allCardsSlider = Array.from(promoSlider.querySelectorAll('.promo-card'));
-
-            const observerOptions = {
-                root: promoSlider,
-                rootMargin: '0px -40% 0px -40%',
-                threshold: 0
-            };
             const cardObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('js-focused');
-                    } else {
-                        entry.target.classList.remove('js-focused');
-                    }
-                });
-            }, observerOptions);
+                entries.forEach(entry => entry.isIntersecting ? entry.target.classList.add('js-focused') : entry.target.classList.remove('js-focused'));
+            }, { root: promoSlider, rootMargin: '0px -40% 0px -40%', threshold: 0 });
+            
             allCardsSlider.forEach(card => cardObserver.observe(card));
 
             setTimeout(() => {
                 const cardWidth = allCardsSlider[0].offsetWidth + 20; 
-                const middleSetStart = cardWidth * totalOriginal;
-                promoSlider.scrollLeft = middleSetStart;
+                promoSlider.scrollLeft = cardWidth * totalOriginal;
                 
                 promoSlider.addEventListener('scroll', () => {
                     const currentScroll = promoSlider.scrollLeft;
                     const maxScroll = promoSlider.scrollWidth - promoSlider.clientWidth;
-                    
                     if (currentScroll < cardWidth) {
-                        promoSlider.style.scrollSnapType = 'none';
-                        promoSlider.scrollLeft += (cardWidth * totalOriginal);
+                        promoSlider.style.scrollSnapType = 'none'; promoSlider.scrollLeft += (cardWidth * totalOriginal);
                         setTimeout(() => promoSlider.style.scrollSnapType = 'x mandatory', 50);
-                    }
-                    else if (currentScroll > maxScroll - cardWidth) {
-                        promoSlider.style.scrollSnapType = 'none';
-                        promoSlider.scrollLeft -= (cardWidth * totalOriginal);
+                    } else if (currentScroll > maxScroll - cardWidth) {
+                        promoSlider.style.scrollSnapType = 'none'; promoSlider.scrollLeft -= (cardWidth * totalOriginal);
                         setTimeout(() => promoSlider.style.scrollSnapType = 'x mandatory', 50);
                     }
                 });
             }, 100);
 
-            const moveNext = () => {
-                const cardWidth = allCardsSlider[0].offsetWidth + 20;
-                promoSlider.scrollBy({ left: cardWidth, behavior: 'smooth' });
-            };
-            const movePrev = () => {
-                const cardWidth = allCardsSlider[0].offsetWidth + 20;
-                promoSlider.scrollBy({ left: -cardWidth, behavior: 'smooth' });
-            };
+            const moveNext = () => promoSlider.scrollBy({ left: allCardsSlider[0].offsetWidth + 20, behavior: 'smooth' });
+            const movePrev = () => promoSlider.scrollBy({ left: -(allCardsSlider[0].offsetWidth + 20), behavior: 'smooth' });
 
-            const startAutoPlay = () => {
-                if(!isAutoPlaying) return;
-                autoScrollTimer = setInterval(moveNext, 3500);
-            };
-            startAutoPlay();
+            autoScrollTimer = setInterval(moveNext, 3500);
 
             const rightArrow = document.querySelector('.right-arrow');
             const leftArrow = document.querySelector('.left-arrow');
             
-            if(rightArrow) {
-                rightArrow.addEventListener('click', () => {
-                    isAutoPlaying = false; clearInterval(autoScrollTimer); moveNext();
-                });
-            }
-            if(leftArrow) {
-                leftArrow.addEventListener('click', () => {
-                    isAutoPlaying = false; clearInterval(autoScrollTimer); movePrev();
-                });
-            }
-
-            promoSlider.addEventListener('touchstart', () => {
-                isAutoPlaying = false; clearInterval(autoScrollTimer);
-            }, {passive: true});
+            if(rightArrow) rightArrow.addEventListener('click', () => { isAutoPlaying = false; clearInterval(autoScrollTimer); moveNext(); });
+            if(leftArrow) leftArrow.addEventListener('click', () => { isAutoPlaying = false; clearInterval(autoScrollTimer); movePrev(); });
+            promoSlider.addEventListener('touchstart', () => { isAutoPlaying = false; clearInterval(autoScrollTimer); }, {passive: true});
         }
     }
 
@@ -425,19 +353,9 @@ document.addEventListener('DOMContentLoaded', () => {
         onSnapshot(doc(db, "settings", "storeStatus"), (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                const status = data.status; 
-                const reason = data.reason || '';
-
-                if (status === 'buka') {
-                    statusElement.innerHTML = "🟢 BUKA SEKARANG";
-                    statusElement.className = "status-badge open";
-                } else if (status === 'tutup') {
-                    statusElement.innerHTML = "🔴 KEDAI TUTUP SEKARANG";
-                    statusElement.className = "status-badge closed";
-                } else if (status === 'cuti') {
-                    statusElement.innerHTML = `🟡 KEDAI CUTI: ${reason}`;
-                    statusElement.className = "status-badge closed";
-                }
+                if (data.status === 'buka') { statusElement.innerHTML = "🟢 BUKA SEKARANG"; statusElement.className = "status-badge open"; } 
+                else if (data.status === 'tutup') { statusElement.innerHTML = "🔴 KEDAI TUTUP SEKARANG"; statusElement.className = "status-badge closed"; } 
+                else if (data.status === 'cuti') { statusElement.innerHTML = `🟡 KEDAI CUTI: ${data.reason || ''}`; statusElement.className = "status-badge closed"; }
             }
         });
     }
@@ -447,72 +365,181 @@ document.addEventListener('DOMContentLoaded', () => {
     if (feedbackForm) {
         feedbackForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('fb-name').value.trim();
-            const message = document.getElementById('fb-message').value.trim();
-
-            if (!name || !message) return;
-
             try {
                 await addDoc(collection(db, "feedbacks"), {
-                    name: name,
-                    message: message,
+                    name: document.getElementById('fb-name').value.trim(),
+                    message: document.getElementById('fb-message').value.trim(),
                     timestamp: new Date().toISOString()
                 });
                 alert("Terima kasih! Maklum balas anda telah berjaya dihantar kepada pihak pengurusan PO Cafe.");
                 feedbackForm.reset();
-            } catch (error) {
-                console.error(error);
-                alert("Gagal menghantar maklum balas. Sila periksa Firestore Security Rules anda.");
+            } catch (error) { alert("Gagal menghantar maklum balas."); }
+        });
+    }
+
+    // --- 10. PENYELESAIAN MASALAH NAMA & HARGA (SYNC DENGAN ADMIN 100%) ---
+    let adminDisplayOptions = { showStock: true, showExpiry: true, showStatus: true };
+
+    onSnapshot(doc(db, "settings", "displayOptions"), (docSnap) => {
+        if (docSnap.exists()) { adminDisplayOptions = docSnap.data(); }
+        refreshMenuDisplay(); 
+    });
+
+    let currentMenusData = [];
+    onSnapshot(collection(db, "menus"), (snapshot) => {
+        currentMenusData = [];
+        snapshot.forEach(docSnap => currentMenusData.push(docSnap.data()));
+        refreshMenuDisplay();
+    });
+
+    // Peta Kategori Admin kepada ID grid di dalam HTML
+    const categoryMap = {
+        'pasta': 'sub-pasta', 'western': 'sub-western', 'kampung': 'sub-kampung', 'gepuk': 'sub-gepuk',
+        'breakfast': 'sub-breakfast', 'extra': 'sub-extra', 'kids': 'sub-kids',
+        'coffee-selection': 'sub-coffee', 'sparkling-americano': 'sub-sparkling',
+        'fizzy-soda': 'sub-fizzy', 'non-coffee': 'sub-non-coffee', 'matcha-series': 'sub-matcha', 'frappe': 'sub-frappe'
+    };
+
+    function refreshMenuDisplay() {
+        const allCards = document.querySelectorAll('.menu-card:not(.promo-card)');
+        
+        // BAHAGIAN A: SEMAK KAD HTML ASAL (KEMASKINI ATAU SOROK)
+        allCards.forEach(card => {
+            const titleEl = card.querySelector('.card-info h3');
+            if (!titleEl) return;
+            
+            const menuNameHTML = titleEl.textContent.trim();
+            const dbMenu = currentMenusData.find(m => m.name === menuNameHTML);
+            
+            // Buang lencana lama untuk render semula
+            const oldBadge = card.querySelector('.card-stock-badge');
+            if (oldBadge) oldBadge.remove();
+
+            if (dbMenu) {
+                // Makanan Wujud Di Admin: Kita Kemaskini Harga dan Tunjukkan
+                card.style.display = ''; 
+                card.classList.remove('deleted-by-admin');
+
+                // KEMASKINI HARGA TERUS DARI ADMIN
+                const priceEl = card.querySelector('.card-info .price');
+                if (priceEl && dbMenu.price) {
+                    if (priceEl.textContent.includes('from')) {
+                        priceEl.textContent = `from RM ${dbMenu.price}`;
+                    } else {
+                        priceEl.textContent = `RM ${dbMenu.price}`;
+                    }
+                }
+
+                // KEMASKINI STOK & STATUS
+                const stock = parseInt(dbMenu.stock) || 0;
+                const isOutOfStock = dbMenu.isOutOfStock || false;
+
+                if (adminDisplayOptions.showStatus && (isOutOfStock || (stock <= 0 && dbMenu.stock !== "" && dbMenu.stock != null))) {
+                    const badge = document.createElement('span');
+                    badge.className = 'card-stock-badge';
+                    badge.innerText = 'HABIS';
+                    badge.style.backgroundColor = '#d70f64'; 
+                    card.style.opacity = '0.4';
+                    card.style.pointerEvents = 'none'; 
+                    card.appendChild(badge);
+                } else if (adminDisplayOptions.showStock && stock > 0) {
+                    const badge = document.createElement('span');
+                    badge.className = 'card-stock-badge';
+                    badge.innerText = `Sisa: ${stock}`;
+                    badge.style.backgroundColor = '#e3a857'; 
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                    card.appendChild(badge);
+                } else {
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                }
+            } else {
+                // JIKA NAMA SUDAH DIUBAH ATAU DIPADAM DI ADMIN: Kita SOROK kad asal (Elak Duplicate)
+                card.style.display = 'none';
+                card.classList.add('deleted-by-admin');
             }
         });
-    }
 
-    // --- 10. SINKRONISASI STOK & STATUS MENU DARI ADMIN (BARU) ---
-    function monitorMenuStockAndStatus() {
-        // Mengambil data dari collection "menus" (Tempat admin simpan data)
-        onSnapshot(collection(db, "menus"), (snapshot) => {
-            snapshot.forEach(docSnap => {
-                const data = docSnap.data();
-                const menuNameAdmin = data.name; // Nama menu (Mesti sama dengan ejaan di h3 html)
-                const stock = parseInt(data.stock) || 0;
-                const status = data.status || 'Ada'; 
-
-                const allCards = document.querySelectorAll('.menu-card');
-                allCards.forEach(card => {
-                    const titleEl = card.querySelector('.card-info h3');
-                    if (titleEl && titleEl.innerText.trim() === menuNameAdmin) {
-                        
-                        // Buang badge lama jika ada
-                        const oldBadge = card.querySelector('.card-stock-badge');
-                        if (oldBadge) oldBadge.remove();
-
-                        // Logik Paparan Status / Stok
-                        if (status === 'Habis' || stock <= 0) {
-                            const badge = document.createElement('span');
-                            badge.className = 'card-stock-badge';
-                            badge.innerText = 'HABIS';
-                            badge.style.backgroundColor = '#d70f64'; // Merah
-                            card.style.opacity = '0.4';
-                            card.style.pointerEvents = 'none'; // Halang dari klik
-                            card.appendChild(badge);
-                        } else if (stock > 0 && stock <= 5) {
-                            // Jika nak tunjuk stok sikit (contoh: kurang dari 5)
-                            const badge = document.createElement('span');
-                            badge.className = 'card-stock-badge';
-                            badge.innerText = `Sisa: ${stock}`;
-                            badge.style.backgroundColor = '#e3a857'; // Oren
-                            card.style.opacity = '1';
-                            card.style.pointerEvents = 'auto';
-                            card.appendChild(badge);
-                        } else {
-                            // Stok banyak / Available - Buang efek gelap
-                            card.style.opacity = '1';
-                            card.style.pointerEvents = 'auto';
-                        }
-                    }
-                });
+        // BAHAGIAN B: TAMBAH KAD BAHARU (ATAU KAD YANG NAMANYA BARU DIUBAH)
+        currentMenusData.forEach(dbMenu => {
+            let isMenuExist = false;
+            
+            // Periksa H3 pada kad yang TIDAK disorok sahaja
+            document.querySelectorAll('.menu-card:not(.deleted-by-admin) h3').forEach(h3 => {
+                if (h3.textContent.trim() === dbMenu.name) {
+                    isMenuExist = true;
+                }
             });
+
+            // Jika tiada dalam skrin HTML, kita bina kad baharu!
+            if (!isMenuExist) {
+                const targetSubId = categoryMap[dbMenu.category];
+                if (targetSubId) {
+                    const gridContainer = document.querySelector(`#${targetSubId} .menu-grid`);
+                    if (gridContainer) {
+                        const stock = parseInt(dbMenu.stock) || 0;
+                        const isOutOfStock = dbMenu.isOutOfStock || false;
+                        
+                        let badgesHTML = '';
+                        let styleOpacity = '';
+
+                        if (adminDisplayOptions.showStatus && (isOutOfStock || (stock <= 0 && dbMenu.stock !== "" && dbMenu.stock != null))) {
+                            badgesHTML = `<span class="card-stock-badge" style="background:#d70f64;">HABIS</span>`;
+                            styleOpacity = 'opacity: 0.4; pointer-events: none;';
+                        } else if (adminDisplayOptions.showStock && stock > 0) {
+                            badgesHTML = `<span class="card-stock-badge" style="background:#e3a857;">Sisa: ${stock}</span>`;
+                        }
+
+                        // Bina kod HTML baru dan selit terus
+                        const newCardHTML = `
+                            <div class="menu-card dynamic-added" data-media-type="image" data-media-src="${dbMenu.image || ''}" style="${styleOpacity}">
+                                ${badgesHTML}
+                                <div class="card-img-wrapper">
+                                    <img src="${dbMenu.image || ''}" alt="${dbMenu.name}" onerror="this.src='https://via.placeholder.com/250?text=Menu+Baru'">
+                                </div>
+                                <div class="card-info">
+                                    <h3>${dbMenu.name}</h3>
+                                    <p class="desc">Menu Citarasa Istimewa PO Cafe.</p>
+                                    <p class="price">RM ${dbMenu.price}</p>
+                                </div>
+                            </div>
+                        `;
+                        gridContainer.insertAdjacentHTML('beforeend', newCardHTML);
+                    }
+                }
+            }
         });
+        
+        // Panggil semula logik tapisan jika pengguna sedang buat carian (search)
+        applySearchFilter();
     }
-    monitorMenuStockAndStatus();
+
+    // --- 11. SINKRONISASI GALERI DARI ADMIN ---
+    onSnapshot(collection(db, "gallery"), (snapshot) => {
+        const galleryGrid = document.querySelector('.gallery-grid');
+        if(!galleryGrid) return;
+        
+        let hasData = false;
+        let html = '';
+        snapshot.forEach(docSnap => {
+            hasData = true;
+            html += `<div class="gallery-item"><img src="${docSnap.data().imageUrl}" alt="Galeri Kafe"></div>`;
+        });
+        
+        if(hasData) {
+            galleryGrid.innerHTML = html;
+        }
+    });
+
+    // --- 12. SINKRONISASI MEDIA SOSIAL DARI ADMIN ---
+    onSnapshot(doc(db, "settings", "socialMedia"), (docSnap) => {
+        if(docSnap.exists()){
+            const data = docSnap.data();
+            const igLink = document.getElementById('link-ig');
+            const tiktokLink = document.getElementById('link-tiktok');
+            if(igLink && data.instagram) igLink.href = data.instagram;
+            if(tiktokLink && data.tiktok) tiktokLink.href = data.tiktok;
+        }
+    });
 });

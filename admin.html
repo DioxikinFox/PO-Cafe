@@ -41,6 +41,8 @@
                 <li data-tab="tab-menu">🍔 Urus Menu</li>
                 <li data-tab="tab-analitik">📊 Analitik & Graf</li>
                 <li data-tab="tab-feedback">💬 Maklum Balas</li>
+                <li data-tab="tab-sosial">📱 Urus Media Sosial</li>
+                <li data-tab="tab-galeri">🖼️ Urus Galeri</li>
             </ul>
             
             <!-- BUTANG TUKAR THEME (GELAP / CERAH) -->
@@ -80,17 +82,12 @@
                         <label style="font-weight:600; font-size:0.9rem;">Sah Sehingga (Pilihan):</label>
                         <input type="date" id="announcement-expiry" class="admin-input" style="width: auto;">
                         <label class="toggle-switch" style="margin-left:20px;">
-                            <input type="checkbox" id="toggle-announcement">
+                            <input type="checkbox" id="announcement-active">
                             <span class="slider"></span>
                         </label>
                         <span style="font-weight: 600;">Aktifkan</span>
                     </div>
                     <button class="btn-primary" id="btn-save-announcement">Simpan Pengumuman</button>
-                    
-                    <div id="active-announcement-box" style="margin-top: 15px; padding: 12px; background: #e8f5e9; border-left: 4px solid #74a779; border-radius: 6px; display: none;">
-                        <strong style="color: #2e7d32; font-size: 0.85rem; display: block; margin-bottom: 3px;">📢 Pengumuman Sedang Aktif Disiarkan:</strong>
-                        <span id="active-announcement-content" style="color: #333; font-size: 0.9rem;">-</span>
-                    </div>
                 </div>
             </section>
 
@@ -98,7 +95,6 @@
             <section id="tab-promosi" class="admin-section">
                 <h2>Pengurusan Promosi & Banner</h2>
                 
-                <!-- TAMBAH BUTANG IMPORT PROMOSI DI SINI -->
                 <div style="margin-bottom: 20px;">
                     <button class="btn-primary" id="btn-auto-import-promo" type="button" style="background: #25D366;">📥 Import Semua Banner Promosi Asal</button>
                 </div>
@@ -123,6 +119,7 @@
                     </table>
                 </div>
             </section>
+
             <!-- TAB 3: URUS MENU -->
             <section id="tab-menu" class="admin-section">
                 <h2>Pengurusan Menu Mengikut Kategori</h2>
@@ -169,14 +166,29 @@
 
             <!-- TAB 4: ANALITIK -->
             <section id="tab-analitik" class="admin-section">
-                <h2>Analitik Pelawat & Klik</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 10px;">
+                    <h2 style="margin: 0;">Analitik Pelawat & Klik</h2>
+                    <button class="btn-primary" id="btn-reset-analitik" style="background: #d70f64; font-size: 0.85rem;">🗑️ Reset Semua Analitik</button>
+                </div>
+
                 <div class="month-expiry-warning" style="display:none; background:#fff3cd; color:#856404; padding:12px 15px; border-radius:6px; margin-bottom:15px; border-left:4px solid #ffc107; font-size:0.85rem;"></div>
                 <div style="background: #e8f4fd; padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; color: #1565c0;">
                     📅 Memaparkan data bagi bulan: <strong id="current-month-label">-</strong> (Auto-reset setiap awal bulan)
                 </div>
+                
                 <div class="stats-grid">
-                    <div class="stat-card"><h3>Jumlah Klik Menu (Bulan Ini)</h3><p class="stat-number" id="stat-clicks">0</p></div>
-                    <div class="stat-card"><h3>Menu Paling Top 🔥</h3><p class="stat-number" id="stat-top-menu" style="font-size: 1.2rem;">Tiada Data</p></div>
+                    <div class="stat-card">
+                        <h3>Pelawat Website 👁️</h3>
+                        <p class="stat-number" id="stat-visitors">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Jumlah Klik Menu</h3>
+                        <p class="stat-number" id="stat-clicks">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Menu Paling Top 🔥</h3>
+                        <p class="stat-number" id="stat-top-menu" style="font-size: 1.2rem;">Tiada Data</p>
+                    </div>
                 </div>
                 <div class="control-card" style="margin-top: 20px;"><div class="chart-container"><canvas id="kategoriChart"></canvas></div></div>
             </section>
@@ -184,12 +196,71 @@
             <!-- TAB 5: MAKLUM BALAS -->
             <section id="tab-feedback" class="admin-section">
                 <h2>Maklum Balas Pelanggan</h2>
-                <div class="month-expiry-warning" style="display:none; background:#fff3cd; color:#856404; padding:12px 15px; border-radius:6px; margin-bottom:15px; border-left:4px solid #ffc107; font-size:0.85rem;"></div>
                 <div style="background: #e8f4fd; padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; color: #1565c0;">
-                    📅 Maklum balas dikumpul khas untuk bulan ini sahaja.
+                    📅 Semua cadangan dan maklum balas pelanggan akan disenaraikan di sini.
                 </div>
                 <div class="control-card">
-                    <div class="feedback-list" id="feedback-container"></div>
+                    <div class="feedback-list" id="feedback-container">
+                        <p style="color:#888; font-style:italic;">Memuat turun maklum balas...</p>
+                    </div>
+                </div>
+            </section>
+
+            
+     <!-- TAB BARU: URUS MEDIA SOSIAL -->
+     <section id="tab-sosial" class="admin-section">
+                <h2>Pengurusan Pautan Media Sosial</h2>
+                <div class="control-card">
+                    <h3>Pautan Rasmi Kedai</h3>
+                    <p>Masukkan pautan (link) platform sosial media kedai untuk paparan pelanggan.</p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">TikTok URL:</label>
+                        <input type="text" id="social-tiktok" class="admin-input" placeholder="https://tiktok.com/@..." style="width:100%;">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Instagram URL:</label>
+                        <input type="text" id="social-ig" class="admin-input" placeholder="https://instagram.com/..." style="width:100%;">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">WhatsApp / Telefon:</label>
+                        <input type="text" id="social-whatsapp" class="admin-input" placeholder="6011xxxxxxxx" style="width:100%;">
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Facebook Page URL:</label>
+                        <input type="text" id="social-fb" class="admin-input" placeholder="https://facebook.com/..." style="width:100%;">
+                    </div>
+
+                    <button class="btn-primary" id="btn-save-social" type="button">Simpan Pautan Sosial</button>
+                </div>
+            </section>
+
+            <!-- TAB BARU: URUS GALERI -->
+            <section id="tab-galeri" class="admin-section">
+                <h2>Pengurusan Galeri Kedai</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <button class="btn-primary" id="btn-auto-import-galeri" type="button" style="background: #25D366;">📥 Import Semua Gambar Galeri Asal</button>
+                </div>
+
+                <div class="control-card">
+                    <div class="filter-bar">
+                        <p>Kawal koleksi gambar galeri pada paparan pelanggan.</p>
+                        <button class="btn-primary" id="btn-open-galeri-modal" type="button">+ Tambah Gambar</button>
+                    </div>
+                    <table class="menu-table">
+                        <thead>
+                            <tr>
+                                <th>Gambar</th>
+                                <th>Tajuk / Keterangan</th>
+                                <th>Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="galeri-table-body"></tbody>
+                    </table>
                 </div>
             </section>
         </main>

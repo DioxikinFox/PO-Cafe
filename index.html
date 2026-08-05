@@ -9,32 +9,35 @@
 </head>
 <body>
 
-    <!-- ANNOUNCEMENT BAR DINAMIK (TAMBAHAN TANPA BUANG APA-APA) -->
-    <div id="customer-announcement-bar" style="display: none; background: #74a779; color: #000; text-align: center; padding: 10px; font-weight: 600; font-size: 0.9rem; position: sticky; top: 0; z-index: 3500;">
-        📢 <span id="announcement-content-text"></span>
+<!-- WRAPPER KEKAL ATAS (STICKY) UNTUK NAVBAR & PENGUMUMAN -->
+    <div class="sticky-header-wrap" id="main-header-wrap">
+        <nav class="navbar" id="navbar">
+            <div class="logo-wrapper">
+                <div class="logo">Peladang Outlet</div>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Utama</a></li>
+                <li><a href="#promo">Menu Baru</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#features">Kelebihan</a></li>
+                <li><a href="#gallery">Galeri</a></li>
+                <li><a href="#about">Tentang Kami</a></li>
+                <li><a href="#feedback-section">Maklum Balas</a></li>
+            </ul>
+        </nav>
+
+        <!-- ANNOUNCEMENT BAR (DUDUK BAWAH NAVBAR, ANIMASI LOOPING) -->
+        <div id="customer-announcement-bar" class="announcement-bar-wrapper">
+            <div class="marquee-content">
+                📢 <span id="announcement-content-text"></span>
+            </div>
+        </div>
     </div>
-
-    <nav class="navbar" id="navbar">
-        <div class="logo-wrapper">
-            <div class="logo">Peladang Outlet</div>
-        </div>
-
-        <div class="menu-toggle" id="mobile-menu">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#home">Utama</a></li>
-            <li><a href="#promo">Menu Baru</a></li>
-            <li><a href="#menu">Menu</a></li>
-            <li><a href="#features">Kelebihan</a></li>
-            <li><a href="#gallery">Galeri</a></li>
-            <li><a href="#about">Tentang Kami</a></li>
-            <li><a href="#feedback-section">Maklum Balas</a></li>
-        </ul>
-    </nav>
-
     <!-- HEADER / HERO SECTION -->
     <header id="home" class="hero" data-bg="#121413">
         <div class="hero-content">

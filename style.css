@@ -25,7 +25,18 @@ body.scrolled .logo-wrapper { padding-left: 56px; }
 /* HERO IMAGE */
 .hero-image { flex: 1; display: flex; justify-content: flex-end; position: relative; animation: fadeIn 1.5s ease-out; }
 #hero-logo-img { width: 500px; height: 500px; object-fit: cover; border-radius: 50%; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); transform: scale(1.1); clip-path: circle(46% at 51% 50%); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10; }
-body.scrolled #hero-logo-img { position: fixed; top: 14px; left: 8%; width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.5); transform: scale(1.15); clip-path: circle(40% at 50% 50%); z-index: 3500; }
+body.scrolled #hero-logo-img { 
+    position: fixed; 
+    top: 14px; 
+    left: 8%; 
+    width: 44px; 
+    height: 44px; 
+    border-radius: 50%; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5); 
+    transform: scale(1.15); 
+    clip-path: circle(40% at 50% 50%); 
+    z-index: 4500; /* Tukar nilai ini kepada 4500 supaya berada di lapisan paling atas */
+}
 body.menu-open #hero-logo-img { opacity: 0; pointer-events: none; }
 
 /* HERO SECTION */
@@ -213,7 +224,7 @@ body.menu-open #hero-logo-img { opacity: 0; pointer-events: none; }
     .gallery-item { width: calc(50% - 8px); height: 160px; }
 
     #hero-logo-img { width: 180px; height: 180px; margin: 0 auto; }
-    body.scrolled #hero-logo-img { left: 5%; width: 35px; height: 35px; top: 12px; z-index: 3500; }
+    body.scrolled #hero-logo-img { left: 5%; width: 35px; height: 35px; top: 12px; z-index: 4500; }
 
     .menu-modal-body { flex-direction: column; }
     .menu-modal-media-wrapper { max-width: 100% !important; height: 280px; min-height: unset !important; }
@@ -224,7 +235,46 @@ body.menu-open #hero-logo-img { opacity: 0; pointer-events: none; }
     .menu-modal-close { top: 10px; right: 10px; width: 35px; height: 35px; font-size: 2rem;}
 }
 
-/* BADGE BAKI STOK & TEMPOH SAH PADA KAD (HANYA MUNCUL JIKA ADA DATA) */
+/* =========================================
+   STICKY HEADER BERSAMA ANNOUNCEMENT
+   ========================================= */
+.sticky-header-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 4000;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Override sifat asal navbar memandangkan ia sudah berada dalam wrapper */
+.navbar { position: relative; border-bottom: none; box-shadow: none; order: 1; }
+
+.announcement-bar-wrapper {
+    background-color: var(--primary-color);
+    color: #000;
+    padding: 10px 0;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    display: none; /* Dikawal oleh Firebase */
+    order: 2; /* Memastikan ia berada di bawah Navbar */
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.marquee-content {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding-left: 100%;
+    animation: marquee 25s linear infinite;
+}
+
+.marquee-content:hover { animation-play-state: paused; }
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+/* BADGES STOK & LUPUT */
 .card-stock-badge, .card-expiry-badge {
     position: absolute;
     left: 15px;
@@ -238,5 +288,5 @@ body.menu-open #hero-logo-img { opacity: 0; pointer-events: none; }
     backdrop-filter: blur(4px);
     border: 1px solid rgba(255,255,255,0.1);
 }
-.card-stock-badge { top: 15px; color: #74a779; }
+.card-stock-badge { top: 15px; } 
 .card-expiry-badge { top: 45px; color: #e3a857; }

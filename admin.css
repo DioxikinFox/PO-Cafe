@@ -180,3 +180,133 @@ body.dark-theme select.admin-input {
     color: #fff !important;
     border-color: #334038 !important;
 }
+
+/* ==========================================================
+   GAYA MODUL MEDIA SOSIAL UNTUK ADMIN
+   ========================================================== */
+.social-item-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+body.dark-theme .social-item-row {
+    background: #121413 !important;
+    border-color: #334038 !important;
+}
+
+/* Penyesuaian skrin telefon agar lebih padat & kemas */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 15px 12px !important;
+    }
+    
+    h2 {
+        font-size: 1.3rem !important;
+        margin-bottom: 15px !important;
+    }
+
+    .control-card {
+        padding: 15px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .menu-table th, .menu-table td {
+        padding: 8px 6px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .social-item-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* ==========================================================
+   PENYESUAIAN KHAS UNTUK TELEFON (MOBILE OPTIMIZATION)
+   ========================================================== */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+        width: 100% !important;
+        min-width: 100% !important;
+        height: 100vh;
+        position: relative;
+    }
+
+    .main-content {
+        padding: 12px 8px !important;
+        overflow-x: hidden;
+    }
+    
+    h2 {
+        font-size: 1.2rem !important;
+        margin-bottom: 12px !important;
+    }
+
+    .control-card {
+        padding: 12px !important;
+        margin-bottom: 15px !important;
+        border-radius: 8px;
+        overflow-x: auto; /* Elak elemen dalam kad terkeluar */
+    }
+
+    /* Kecilkan saiz jadual menu & galeri agar muat skrin phone */
+    .menu-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .menu-table th, .menu-table td {
+        padding: 6px 8px !important;
+        font-size: 0.78rem !important;
+    }
+
+    /* Padatkan input teks & butang untuk phone */
+    .admin-input, select.admin-input {
+        font-size: 0.85rem !important;
+        padding: 8px 10px !important;
+    }
+
+    .btn-primary, .btn-edit, .btn-delete {
+        padding: 6px 10px !important;
+        font-size: 0.78rem !important;
+    }
+
+    /* Bar atas telefon */
+    .mobile-top-bar {
+        display: flex;
+        align-items: center;
+        background: #121413;
+        color: white;
+        padding: 10px 15px;
+        gap: 12px;
+        flex-shrink: 0;
+        z-index: 1000;
+        border-bottom: 1px solid #2a2e2c;
+    }
+
+    .sidebar {
+        display: none;
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: 48px;
+        left: 0;
+        z-index: 9999;
+        background: #121413;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        border-bottom: 3px solid #74a779;
+    }
+
+    .sidebar.show {
+        display: flex;
+    }
+}

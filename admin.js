@@ -17,8 +17,7 @@ const auth = getAuth(app);
 
 let semuaMenuGlobal = [];
 let semuaPromoGlobal = [];
-let chartRendered = false;
-let myChart = null; // Menyimpan instance graf supaya boleh di-update
+let myChart = null; 
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -86,18 +85,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetSection = document.getElementById(targetId);
             if(targetSection) targetSection.classList.add('active');
 
-            // Render graf SEBENAR bila masuk tab analitik
             if (targetId === 'tab-analitik') {
                 renderGrafAnalitikSebenar();
                 tunjukJumlahKlikKeseluruhan();
+                tunjukJumlahPelawat();
+            }
+
+            if (targetId === 'tab-feedback') {
+                fetchFeedbacksRealtime();
             }
         });
     });
 
-    // --- 2. KAWALAN PENGUMUMAN (BARU DITAMBAH) ---
+    // --- 2. KAWALAN PENGUMUMAN ---
     const btnSaveAnnouncement = document.getElementById('btn-save-announcement');
     if (btnSaveAnnouncement) {
-        // Tarik data sedia ada (jika ada) ke dalam form
         getDoc(doc(db, "settings", "announcement")).then((docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -107,8 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Simpan pengumuman
-        btnSaveAnnouncement.addEventListener('click', async () => {
+        btnSaveAnnouncement.addEventListener('click', async (e) => {
+            e.preventDefault();
             const text = document.getElementById('announcement-text').value.trim();
             const expiryDate = document.getElementById('announcement-expiry').value;
             const isActive = document.getElementById('announcement-active').checked;
@@ -123,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     text: text,
                     expiryDate: expiryDate,
                     isActive: isActive
-                });
+                }, { merge: true });
                 alert("Pengumuman berjaya disimpan & dikemaskini di website pelanggan!");
             } catch (error) {
                 alert("Gagal simpan pengumuman: " + error.message);
@@ -164,7 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnSaveStatus) {
-        btnSaveStatus.addEventListener('click', async () => {
+        btnSaveStatus.addEventListener('click', async (e) => {
+            e.preventDefault();
             const statusVal = statusSelect.value;
             const reasonVal = reasonInput.value;
             updateStatusUI(statusVal, reasonVal);
@@ -173,21 +176,158 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4. PENGURUSAN MENU (DENGAN STOK) ---
-    window.fetchMenusFromDatabase = async function() {
+    // --- 4. PENGURUSAN PROMOSI ---
+    window.fetchPromotions = async function() {
+        const promoTableBody = document.getElementById('promo-table-body');
+        if (!promoTableBody) return;
+        promoTableBody.innerHTML = "";
+        semuaPromoGlobal = [];
+
+        try {
+            const querySnapshot = await getDocs(collection(db, "promotions"));
+            querySnapshot.forEach((docSnap) => {
+                const item = docSnap.data();
+                item.id = docSnap.id;
+                semuaPromoGlobal.push(item);
+                const bakiStokPromo = (item.stock !== undefined && item.stock !== null && item.stock !== '') ? item.stock : 'Tiada Had';
+
+                let countdownText = `<span style="color:#888;">Tiada Tarikh Tamat</span>`;
+                if (item.expiryDate) {
+                    const today = new Date();
+                    const expDate = new Date(item.expiryDate);
+                    const diffTime = expDate - today;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+                    if (diffDays < 0) { countdownText = `<strong style="color:#d70f64;">Telah Tamat!</strong>`; }
+                    else if (diffDays === 0) { countdownText = `<strong style="color:#e3a857;">Tamat Hari Ini!</strong>`; }
+                    else { countdownText = `<strong style="color:#25D366;">${diffDays} Hari Lagi</strong>`; }
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.type === 'video' ? '<video src="'+item.src+'" width="50" muted></video>' : '<img src="'+item.src+'" onerror="this.src=\'https://via.placeholder.com/40?text=Promo\'" width="40" height="40" style="object-fit:cover; border-radius:5px;">'}</td>
+                    <td><strong>${item.title}</strong></td>
+                    <td><span class="badge ${item.type === 'video' ? 'badge-video' : ''}">${item.badge}</span></td>
+                    <td><span style="font-weight:600;">${bakiStokPromo}</span></td>
+                    <td>${countdownText}</td>
+                    <td>
+                        <button class="btn-edit" type="button" onclick="bukaModalEditPromo('${item.id}')">Edit</button> 
+                        <button class="btn-delete" type="button" onclick="deletePromoDb('${item.id}')">Padam</button>
+                    </td>
+                `;
+                promoTableBody.appendChild(tr);
+            });
+        } catch (e) { console.error(e); }
+    };
+    fetchPromotions();
+
+    const promoModal = document.getElementById('promo-modal');
+    const btnOpenPromoModal = document.getElementById('btn-open-promo-modal');
+    if (btnOpenPromoModal) {
+        btnOpenPromoModal.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('promo-edit-id').value = "";
+            document.getElementById('modal-promo-title').innerText = "Tambah Banner Promosi";
+            document.getElementById('promo-title-input').value = "";
+            document.getElementById('promo-badge-input').value = "";
+            document.getElementById('promo-src-input').value = "";
+            document.getElementById('promo-stock-input').value = "";
+            document.getElementById('promo-expiry-input').value = "";
+            if(promoModal) promoModal.style.display = 'flex';
+        });
+    }
+    const btnClosePromoModal = document.getElementById('btn-close-promo-modal');
+    if(btnClosePromoModal) btnClosePromoModal.addEventListener('click', (e) => { 
+        e.preventDefault();
+        promoModal.style.display = 'none'; 
+    });
+
+    window.bukaModalEditPromo = function(id) {
+        const item = semuaPromoGlobal.find(p => p.id === id);
+        if(!item) return;
+        document.getElementById('promo-edit-id').value = item.id;
+        document.getElementById('modal-promo-title').innerText = "Kemaskini / Edit Promosi";
+        document.getElementById('promo-title-input').value = item.title;
+        document.getElementById('promo-type-input').value = item.type;
+        document.getElementById('promo-badge-input').value = item.badge;
+        document.getElementById('promo-src-input').value = item.src;
+        document.getElementById('promo-stock-input').value = (item.stock !== undefined && item.stock !== null) ? item.stock : '';
+        document.getElementById('promo-expiry-input').value = item.expiryDate || '';
+        if(promoModal) promoModal.style.display = 'flex';
+    };
+
+    const btnSavePromoDb = document.getElementById('btn-save-promo-db');
+    if(btnSavePromoDb) {
+        btnSavePromoDb.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('promo-edit-id').value;
+            const title = document.getElementById('promo-title-input').value.trim();
+            const type = document.getElementById('promo-type-input').value;
+            const badge = document.getElementById('promo-badge-input').value.trim();
+            const src = document.getElementById('promo-src-input').value.trim();
+            const stockRaw = document.getElementById('promo-stock-input').value.trim();
+            const stock = stockRaw !== '' ? parseInt(stockRaw) : '';
+            const expiryDate = document.getElementById('promo-expiry-input').value;
+
+            if (!title || !src) { alert("Sila isi tajuk dan pautan fail media."); return; }
+
+            try {
+                if(id === "") {
+                    await addDoc(collection(db, "promotions"), { title, type, badge, src, stock, expiryDate });
+                } else {
+                    await updateDoc(doc(db, "promotions", id), { title, type, badge, src, stock, expiryDate });
+                }
+                promoModal.style.display = 'none';
+                fetchPromotions();
+            } catch (e) { alert("Gagal simpan promosi."); }
+        });
+    }
+
+    window.deletePromoDb = async function(id) {
+        if (confirm("Padam promosi ini?")) { 
+            try {
+                await deleteDoc(doc(db, "promotions", id)); 
+                fetchPromotions(); 
+            } catch(e) { alert("Gagal padam promosi."); }
+        }
+    };
+
+    const btnAutoImportPromo = document.getElementById('btn-auto-import-promo');
+    if (btnAutoImportPromo) {
+        btnAutoImportPromo.addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (!confirm("Tindakan ini akan memadam promosi lama dan memuat naik kesemua banner promosi asal. Teruskan?")) return;
+            try {
+                const snapshot = await getDocs(collection(db, "promotions"));
+                for (const d of snapshot.docs) { await deleteDoc(doc(db, "promotions", d.id)); }
+                
+                const senaraiPromoAsal = [
+                    { title: "The Most Killer Ayam Gepuk", type: "video", badge: "VIDEO 🎬", src: "Bahan/vdoayamgepuk.mp4", stock: 50, expiryDate: "" },
+                    { title: "Chicken Crispy Salad", type: "image", badge: "BARU 🌟", src: "Bahan/menubaru.jpeg", stock: 40, expiryDate: "" },
+                    { title: "Affogato Matcha Strawberry", type: "image", badge: "BARU 🌟", src: "Bahan/menubaru (2).jpeg", stock: 45, expiryDate: "" },
+                    { title: "Mantou", type: "image", badge: "BEST SELLER 🔥", src: "Bahan/menubaru (3).jpeg", stock: 60, expiryDate: "" },
+                    { title: "Bagel", type: "image", badge: "BEST SELLER 🔥", src: "Bahan/bagel.jpeg", stock: 50, expiryDate: "" }
+                ];
+                for (const promo of senaraiPromoAsal) { await addDoc(collection(db, "promotions"), promo); }
+                alert("Berjaya diimport!"); fetchPromotions();
+            } catch (error) { alert("Gagal import promosi: " + error.message); }
+        });
+    }
+
+    // --- 5. PENGURUSAN MENU (REAL-TIME SNAPSHOT) ---
+    window.fetchMenusFromDatabase = function() {
         const semuaKategori = [
             'pasta', 'western', 'kampung', 'gepuk', 'breakfast', 'extra', 'kids', 
             'coffee-selection', 'sparkling-americano', 'fizzy-soda', 'non-coffee', 'matcha-series', 'frappe'
         ];
-        
-        semuaKategori.forEach(cat => { 
-            const tb = document.getElementById(`table-${cat}`); 
-            if (tb) tb.innerHTML = ""; 
-        });
-        semuaMenuGlobal = [];
 
-        try {
-            const querySnapshot = await getDocs(collection(db, "menus"));
+        onSnapshot(collection(db, "menus"), (querySnapshot) => {
+            semuaMenuGlobal = [];
+            semuaKategori.forEach(cat => { 
+                const tb = document.getElementById(`table-${cat}`); 
+                if (tb) tb.innerHTML = ""; 
+            });
+
             querySnapshot.forEach((docSnap) => {
                 const item = docSnap.data();
                 item.id = docSnap.id;
@@ -216,20 +356,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     tb.appendChild(tr);
                 }
             });
-        } catch (e) { console.error(e); }
+        });
     };
     fetchMenusFromDatabase();
 
     window.toggleStokMenu = async function(id, currentStatus) {
         try {
             await updateDoc(doc(db, "menus", id), { isOutOfStock: !currentStatus });
-            fetchMenusFromDatabase();
         } catch(e) { alert("Gagal update status stok."); }
     }
 
     const menuModal = document.getElementById('menu-modal');
     document.querySelectorAll('.btn-tambah-menu').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            e.preventDefault();
             document.getElementById('menu-edit-id').value = "";
             document.getElementById('modal-menu-title').innerText = "Tambah Menu Baru";
             document.getElementById('menu-name-input').value = "";
@@ -242,7 +382,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     const btnCloseMenuModal = document.getElementById('btn-close-menu-modal');
-    if(btnCloseMenuModal) btnCloseMenuModal.addEventListener('click', () => { menuModal.style.display = 'none'; });
+    if(btnCloseMenuModal) btnCloseMenuModal.addEventListener('click', (e) => { 
+        e.preventDefault();
+        menuModal.style.display = 'none'; 
+    });
 
     window.bukaModalEditMenu = function(id) {
         const item = semuaMenuGlobal.find(m => m.id === id);
@@ -259,7 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnSaveMenuDb = document.getElementById('btn-save-menu-db');
     if(btnSaveMenuDb) {
-        btnSaveMenuDb.addEventListener('click', async () => {
+        btnSaveMenuDb.addEventListener('click', async (e) => {
+            e.preventDefault();
             const id = document.getElementById('menu-edit-id').value;
             const name = document.getElementById('menu-name-input').value.trim();
             const category = document.getElementById('menu-cat-input').value;
@@ -273,23 +417,47 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 if (id === "") { await addDoc(collection(db, "menus"), { name, category, price, stock, image, isOutOfStock: false }); } 
                 else { await updateDoc(doc(db, "menus", id), { name, category, price, stock, image }); }
-                menuModal.style.display = 'none'; fetchMenusFromDatabase();
+                menuModal.style.display = 'none'; 
             } catch (e) { alert("Gagal simpan: " + e.message); }
         });
     }
 
     window.deleteMenuDb = async function(id) {
         if (confirm("Adakah anda pasti mahu memadam menu ini?")) {
-            await deleteDoc(doc(db, "menus", id)); fetchMenusFromDatabase();
+            try {
+                await deleteDoc(doc(db, "menus", id));
+            } catch(e) { alert("Gagal padam menu."); }
         }
     };
 
-    // --- 5. TUKAR SUB-TAB ---
+    const btnAutoImport = document.getElementById('btn-auto-import');
+    if (btnAutoImport) {
+        btnAutoImport.addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (!confirm("Padam menu lama dan import menu asal tanpa duplikasi?")) return;
+            try {
+                const snapshot = await getDocs(collection(db, "menus"));
+                for (const d of snapshot.docs) { await deleteDoc(doc(db, "menus", d.id)); }
+                
+                const senaraiMenuAsal = [
+                    { name: "Beef Bolognese", category: "pasta", price: "14.90", stock: 50, image: "BahanBaru/pastabolonis.jpeg", isOutOfStock: false },
+                    { name: "Creamy Chicken Spaghetti", category: "pasta", price: "14.90", stock: 50, image: "BahanBaru/pastacreamy.jpeg", isOutOfStock: false },
+                    { name: "Nasi Ayam Gepuk Original", category: "gepuk", price: "14.50", stock: 50, image: "BahanBaru/ayamgepuk.jpeg", isOutOfStock: false },
+                    { name: "Nasi Lemak Telur Mata", category: "breakfast", price: "5.90", stock: 40, image: "BahanBaru/nasilemak.jpeg", isOutOfStock: false }
+                ];
+                for (const menu of senaraiMenuAsal) { await addDoc(collection(db, "menus"), menu); }
+                alert("Berjaya diimport!"); 
+            } catch (error) { alert("Gagal import: " + error.message); }
+        });
+    }
+
+    // --- 6. TUKAR SUB-TAB ---
     const subTabBtns = document.querySelectorAll('.sub-tab-btn');
     const subCatContents = document.querySelectorAll('.subcat-content');
 
     subTabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
             subTabBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const targetCat = btn.getAttribute('data-subcat');
@@ -297,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 6. LOG MASUK & LOUT ---
+    // --- 7. LOG MASUK & LOG KELUAR ---
     window.loginKhas = async function() {
         const email = document.getElementById('admin-email').value.trim();
         const pass = document.getElementById('admin-pass').value.trim();
@@ -338,36 +506,38 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => window.location.reload(), 400);
     }
 
-    // --- 7. FUNGSI RENDER GRAF ANALITIK SEBENAR (DARI FIREBASE) ---
+    // --- 8. FUNGSI ANALITIK ---
     async function renderGrafAnalitikSebenar() {
         const canvasEl = document.getElementById('kategoriChart');
         if (!canvasEl) return;
 
         try {
-            // Tarik data klik menu sebenar dari database
             const docSnap = await getDoc(doc(db, "analytics", "menuClicks"));
             let labels = [];
             let dataArr = [];
 
             if (docSnap.exists()) {
                 const clicksData = docSnap.data();
-                
-                // Sort data untuk dapatkan "Top Menu Paling Banyak Klik"
                 const sortedMenu = Object.entries(clicksData).sort((a, b) => b[1] - a[1]);
                 
-                // Ambil top 5 atau 6 menu sahaja untuk dipaparkan pada graf
+                const statTopMenuEl = document.getElementById('stat-top-menu');
+                if(statTopMenuEl && sortedMenu.length > 0) {
+                    statTopMenuEl.innerText = sortedMenu[0][0]; 
+                } else if(statTopMenuEl) {
+                    statTopMenuEl.innerText = "Tiada Data";
+                }
+
                 const topMenu = sortedMenu.slice(0, 6);
-                
-                labels = topMenu.map(item => item[0]); // Nama menu
-                dataArr = topMenu.map(item => item[1]); // Jumlah klik
+                labels = topMenu.map(item => item[0]); 
+                dataArr = topMenu.map(item => item[1]); 
             } else {
                 labels = ['Tiada Klik Direkodkan'];
                 dataArr = [0];
+                const statTopMenuEl = document.getElementById('stat-top-menu');
+                if(statTopMenuEl) statTopMenuEl.innerText = "Tiada Data";
             }
 
             const ctx = canvasEl.getContext('2d');
-            
-            // Padam graf lama jika wujud untuk elak 'glitch' pertindihan
             if (myChart) { myChart.destroy(); }
 
             myChart = new Chart(ctx, {
@@ -384,29 +554,184 @@ document.addEventListener('DOMContentLoaded', () => {
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
-                    }
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
                 }
             });
-        } catch (error) {
-            console.error("Gagal memuat naik graf:", error);
-        }
+        } catch (error) { console.error(error); }
     }
 
-    // --- 8. TUNJUK JUMLAH KLIK KESELURUHAN (DARI FIREBASE) ---
     async function tunjukJumlahKlikKeseluruhan() {
         const statClicksEl = document.getElementById('stat-clicks');
         if(!statClicksEl) return;
-        
         try {
             const docSnap = await getDoc(doc(db, "analytics", "clicksData"));
+            if (docSnap.exists()) { statClicksEl.innerText = docSnap.data().totalClicks || 0; } 
+            else { statClicksEl.innerText = "0"; }
+        } catch (e) {}
+    }
+
+    async function tunjukJumlahPelawat() {
+        const statVisEl = document.getElementById('stat-visitors');
+        if(!statVisEl) return;
+        try {
+            const docSnap = await getDoc(doc(db, "analytics", "visitors"));
+            if(docSnap.exists()) { statVisEl.innerText = docSnap.data().count || 0; } 
+            else { statVisEl.innerText = "0"; }
+        } catch(e) {}
+    }
+
+    const btnResetAnalitik = document.getElementById('btn-reset-analitik');
+    if(btnResetAnalitik) {
+        btnResetAnalitik.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const confirm1 = confirm("Adakah anda pasti mahu RESET semua data klik, pelawat dan graf?");
+            if (confirm1) {
+                const confirm2 = confirm("AMARAN TERAKHIR: Data yang dipadam tidak boleh dikembalikan sama sekali. Teruskan reset?");
+                if (confirm2) {
+                    try {
+                        await setDoc(doc(db, "analytics", "clicksData"), { totalClicks: 0, topMenu: "-" });
+                        await setDoc(doc(db, "analytics", "menuClicks"), {});
+                        await setDoc(doc(db, "analytics", "visitors"), { count: 0 });
+                        alert("Berjaya! Semua data analitik telah dikosongkan.");
+                        renderGrafAnalitikSebenar();
+                        tunjukJumlahKlikKeseluruhan();
+                        tunjukJumlahPelawat();
+                    } catch (e) { alert("Gagal reset: " + e.message); }
+                }
+            }
+        });
+    }
+
+    // --- 9. MAKLUM BALAS PELANGGAN (REAL-TIME & DENGAN BUTANG DELETE) ---
+    window.fetchFeedbacksRealtime = function() {
+        const container = document.getElementById('feedback-container');
+        if(!container) return;
+
+        onSnapshot(collection(db, "feedbacks"), (querySnapshot) => {
+            container.innerHTML = "";
+            
+            if(querySnapshot.empty) {
+                container.innerHTML = '<p style="color:#666; text-align:center; padding:15px;">Tiada maklum balas pelanggan setakat ini.</p>';
+                return;
+            }
+            
+            querySnapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                const id = docSnap.id;
+                const tarikh = data.timestamp ? new Date(data.timestamp).toLocaleString('ms-MY') : '-';
+                const stars = '★'.repeat(data.rating || 5) + '☆'.repeat(5 - (data.rating || 5));
+                
+                const fbDiv = document.createElement('div');
+                fbDiv.style.cssText = "background:var(--card-bg, #fff); border-left:4px solid #74a779; padding:20px; border-radius:8px; margin-bottom:15px; box-shadow:0 4px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;";
+                fbDiv.innerHTML = `
+                    <div style="flex: 1;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; gap:10px;">
+                            <strong style="color:#3d5a80; font-size:1.05rem;">👤 ${data.name || 'Pelanggan'} <span style="color: #f5a623; margin-left: 8px; font-size:0.9rem;">${stars}</span></strong>
+                            <span style="font-size:0.8rem; color:#888;">🕒 ${tarikh}</span>
+                        </div>
+                        <p style="color:var(--text-main, #333); line-height:1.5; font-size: 0.95rem;">"${data.message || data.comment || ''}"</p>
+                    </div>
+                    <button class="btn-delete" type="button" onclick="deleteFeedbackDb('${id}')" style="padding: 6px 12px; font-size: 0.78rem; flex-shrink: 0; cursor: pointer;">Padam</button>
+                `;
+                container.appendChild(fbDiv);
+            });
+        });
+    };
+    fetchFeedbacksRealtime();
+
+    window.deleteFeedbackDb = async function(id) {
+        if (confirm("Adakah anda pasti mahu memadam maklum balas ini?")) {
+            try {
+                await deleteDoc(doc(db, "feedbacks", id));
+            } catch (e) {
+                alert("Gagal memadam maklum balas: " + e.message);
+            }
+        }
+    };
+
+    // --- 10. KAWALAN MEDIA SOSIAL ---
+    const btnSaveSocial = document.getElementById('btn-save-social');
+    if (btnSaveSocial) {
+        getDoc(doc(db, "settings", "socialLinks")).then((docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                statClicksEl.innerText = data.totalClicks || 0;
-            } else {
-                statClicksEl.innerText = "0";
+                if(document.getElementById('social-tiktok')) document.getElementById('social-tiktok').value = data.tiktok || '';
+                if(document.getElementById('social-ig')) document.getElementById('social-ig').value = data.instagram || '';
+                if(document.getElementById('social-whatsapp')) document.getElementById('social-whatsapp').value = data.whatsapp || '';
+                if(document.getElementById('social-fb')) document.getElementById('social-fb').value = data.facebook || '';
             }
-        } catch (e) { console.error(e); }
+        });
+
+        btnSaveSocial.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const tiktok = document.getElementById('social-tiktok').value.trim();
+            const instagram = document.getElementById('social-ig').value.trim();
+            const whatsapp = document.getElementById('social-whatsapp').value.trim();
+            const facebook = document.getElementById('social-fb').value.trim();
+
+            try {
+                await setDoc(doc(db, "settings", "socialLinks"), { tiktok, instagram, whatsapp, facebook });
+                alert("Pautan media sosial berjaya disimpan & dikemaskini untuk pelanggan!");
+            } catch (error) {
+                alert("Gagal simpan pautan media sosial: " + error.message);
+            }
+        });
     }
+
+    // --- 11. KAWALAN GALERI & AUTO IMPORT (REAL-TIME SNAPSHOT) ---
+    const btnAutoImportGaleri = document.getElementById('btn-auto-import-galeri');
+    if (btnAutoImportGaleri) {
+        btnAutoImportGaleri.addEventListener('click', async (e) => {
+            e.preventDefault(); // HALANG REFRESH / AUTO CLOSE POP-UP
+            if (!confirm("Adakah anda pasti mahu import semula semua gambar galeri asal ke dalam database?")) return;
+
+            const galeriAsal = [
+                { title: "Suasana Malam PO Cafe", image: "https://via.placeholder.com/400x300?text=Cafe+1" },
+                { title: "Koleksi Kopi Signature", image: "https://via.placeholder.com/400x300?text=Kopi+1" },
+                { title: "Hidangan Pasta Special", image: "https://via.placeholder.com/400x300?text=Pasta+1" },
+                { title: "Ruang Santai Pelanggan", image: "https://via.placeholder.com/400x300?text=Ruang+1" }
+            ];
+
+            try {
+                for (let item of galeriAsal) {
+                    await addDoc(collection(db, "galeri"), item);
+                }
+                alert("Berjaya import semua gambar galeri asal!");
+            } catch (error) {
+                alert("Gagal import galeri: " + error.message);
+            }
+        });
+    }
+
+    window.fetchGaleriFromDatabase = function() {
+        const tb = document.getElementById('galeri-table-body');
+        if (!tb) return;
+
+        onSnapshot(collection(db, "galeri"), (querySnapshot) => {
+            tb.innerHTML = "";
+            querySnapshot.forEach((docSnap) => {
+                const item = docSnap.data();
+                const id = docSnap.id;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><img src="${item.image || ''}" onerror="this.src='https://via.placeholder.com/40?text=Galeri'" width="45" height="45" style="border-radius:6px; object-fit:cover;"></td>
+                    <td><strong>${item.title || 'Tanpa Tajuk'}</strong></td>
+                    <td>
+                        <button class="btn-delete" type="button" onclick="deleteGaleriDb('${id}')">Padam</button>
+                    </td>
+                `;
+                tb.appendChild(tr);
+            });
+        });
+    };
+    fetchGaleriFromDatabase();
+
+    window.deleteGaleriDb = async function(id) {
+        if (confirm("Padam gambar ini dari galeri?")) {
+            try {
+                await deleteDoc(doc(db, "galeri", id));
+            } catch (e) { alert("Gagal padam galeri."); }
+        }
+    };
 });
