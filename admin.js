@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
+        themeToggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             document.body.classList.toggle('dark-theme');
             const isDark = document.body.classList.contains('dark-theme');
             localStorage.setItem('po_cafe_admin_theme', isDark ? 'dark' : 'light');
@@ -67,7 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebarNav = document.getElementById('sidebarNav');
 
     if (hamburgerBtn && sidebarNav) {
-        hamburgerBtn.addEventListener('click', () => { sidebarNav.classList.toggle('show'); });
+        hamburgerBtn.addEventListener('click', (e) => { 
+            e.preventDefault();
+            sidebarNav.classList.toggle('show'); 
+        });
         sidebarItems.forEach(li => {
             li.addEventListener('click', () => {
                 if (window.innerWidth <= 768) sidebarNav.classList.remove('show');
@@ -76,7 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     sidebarItems.forEach(item => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
             sidebarItems.forEach(li => li.classList.remove('active'));
             item.classList.add('active');
             adminSections.forEach(section => section.classList.remove('active'));
@@ -97,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 2. KAWALAN PENGUMUMAN ---
+    // --- 2. KAWALAN PENGUMUMAN BERJALAN (LIVE ANNOUNCEMENT) ---
     const btnSaveAnnouncement = document.getElementById('btn-save-announcement');
     if (btnSaveAnnouncement) {
         getDoc(doc(db, "settings", "announcement")).then((docSnap) => {
@@ -115,25 +120,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const expiryDate = document.getElementById('announcement-expiry').value;
             const isActive = document.getElementById('announcement-active').checked;
 
-            if (!text && isActive) {
-                alert("Sila masukkan teks pengumuman jika ingin diaktifkan.");
-                return;
-            }
-
             try {
                 await setDoc(doc(db, "settings", "announcement"), {
                     text: text,
                     expiryDate: expiryDate,
                     isActive: isActive
                 }, { merge: true });
-                alert("Pengumuman berjaya disimpan & dikemaskini di website pelanggan!");
+                alert("Pengumuman live berjaya disimpan & dikemaskini di website pelanggan!");
             } catch (error) {
                 alert("Gagal simpan pengumuman: " + error.message);
             }
         });
     }
 
-    // --- 3. KAWALAN KEDAI ---
+    // --- 3. KAWALAN KEDAI (AUTO & MANUAL) ---
     const statusSelect = document.getElementById('store-status-select');
     const reasonInput = document.getElementById('cuti-reason-input');
     const btnSaveStatus = document.getElementById('btn-save-status');
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateStatusUI(status, reason) {
         if(!statusText) return;
-        if (status === 'buka') { statusText.innerText = "STATUS KINI: BUKA"; statusText.style.color = "#25D366"; reasonInput.style.display = 'none'; }
+        if (status === 'buka') { statusText.innerText = "STATUS KINI: BUKA (AUTO)"; statusText.style.color = "#25D366"; reasonInput.style.display = 'none'; }
         else if (status === 'tutup') { statusText.innerText = "STATUS KINI: TUTUP"; statusText.style.color = "#d70f64"; reasonInput.style.display = 'none'; }
         else if (status === 'cuti') { statusText.innerText = "STATUS KINI: CUTI (" + (reason||"Tiada sebab") + ")"; statusText.style.color = "#e3a857"; reasonInput.style.display = 'block'; }
     }
@@ -602,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 9. MAKLUM BALAS PELANGGAN (REAL-TIME & DENGAN BUTANG DELETE) ---
+    // --- 9. MAKLUM BALAS PELANGGAN ---
     window.fetchFeedbacksRealtime = function() {
         const container = document.getElementById('feedback-container');
         if(!container) return;
@@ -678,27 +678,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 11. KAWALAN GALERI & AUTO IMPORT (REAL-TIME SNAPSHOT) ---
-    const btnAutoImportGaleri = document.getElementById('btn-auto-import-galeri');
-    if (btnAutoImportGaleri) {
-        btnAutoImportGaleri.addEventListener('click', async (e) => {
-            e.preventDefault(); // HALANG REFRESH / AUTO CLOSE POP-UP
-            if (!confirm("Adakah anda pasti mahu import semula semua gambar galeri asal ke dalam database?")) return;
+    // --- 11. KAWALAN GALERI & TAMBAH GAMBAR GALERI ---
+    const galeriModal = document.getElementById('galeri-modal');
+    const btnOpenGaleriModal = document.getElementById('btn-open-galeri-modal');
+    if(btnOpenGaleriModal) {
+        btnOpenGaleriModal.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('galeri-title-input').value = "";
+            document.getElementById('galeri-img-input').value = "";
+            if(galeriModal) galeriModal.style.display = 'flex';
+        });
+    }
 
-            const galeriAsal = [
-                { title: "Suasana Malam PO Cafe", image: "https://via.placeholder.com/400x300?text=Cafe+1" },
-                { title: "Koleksi Kopi Signature", image: "https://via.placeholder.com/400x300?text=Kopi+1" },
-                { title: "Hidangan Pasta Special", image: "https://via.placeholder.com/400x300?text=Pasta+1" },
-                { title: "Ruang Santai Pelanggan", image: "https://via.placeholder.com/400x300?text=Ruang+1" }
-            ];
+    const btnCloseGaleriModal = document.getElementById('btn-close-galeri-modal');
+    if(btnCloseGaleriModal) {
+        btnCloseGaleriModal.addEventListener('click', (e) => {
+            e.preventDefault();
+            galeriModal.style.display = 'none';
+        });
+    }
+
+    const btnSaveGaleriDb = document.getElementById('btn-save-galeri-db');
+    if(btnSaveGaleriDb) {
+        btnSaveGaleriDb.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('galeri-title-input').value.trim();
+            const image = document.getElementById('galeri-img-input').value.trim();
+
+            if(!title || !image) {
+                alert("Sila isi tajuk dan pautan gambar!");
+                return;
+            }
 
             try {
-                for (let item of galeriAsal) {
-                    await addDoc(collection(db, "galeri"), item);
-                }
-                alert("Berjaya import semua gambar galeri asal!");
-            } catch (error) {
-                alert("Gagal import galeri: " + error.message);
+                await addDoc(collection(db, "galeri"), { title, image });
+                galeriModal.style.display = 'none';
+                alert("Gambar berjaya ditambah ke galeri!");
+            } catch (err) {
+                alert("Gagal simpan gambar: " + err.message);
             }
         });
     }
