@@ -31,13 +31,14 @@
             </ul>
         </nav>
 
-        <!-- ANNOUNCEMENT BAR (DUDUK BAWAH NAVBAR, ANIMASI LOOPING) -->
+        <!-- ANNOUNCEMENT BAR -->
         <div id="customer-announcement-bar" class="announcement-bar-wrapper">
             <div class="marquee-content">
                 📢 <span id="announcement-content-text"></span>
             </div>
         </div>
     </div>
+
     <!-- HEADER / HERO SECTION -->
     <header id="home" class="hero" data-bg="#121413">
         <div class="hero-content">
@@ -55,7 +56,7 @@
         </div>
     </header>
 
-    <!-- SEKSYEN MENU BARU & PROMOSI (ASAL DIKEKALKAN) -->
+    <!-- SEKSYEN MENU BARU & PROMOSI (100% DINAMIK DARI DATABASE) -->
     <section id="promo" class="promo-section" data-bg="#181c1a">
         <div class="section-title">
             <span>Eksklusif & Terkini</span>
@@ -65,67 +66,14 @@
 
         <div class="promo-carousel-container">
             <button class="slider-arrow left-arrow">&#10094;</button>
-            
             <div class="promo-slider" id="promoSlider">
-                <!-- Kad Promo Video Ayam Gepuk -->
-                <div class="promo-card menu-card" data-media-type="video" data-media-src="Bahan/vdoayamgepuk.mp4">
-                    <span class="promo-tag-badge">VIDEO 🎬</span>
-                    <div class="card-img-wrapper">
-                        <video src="Bahan/vdoayamgepuk.mp4" autoplay muted loop playsinline></video>
-                    </div>
-                    <div class="card-info">
-                        <h3>The Most Killer Ayam Gepuk</h3>
-                        <p class="desc">Tonton video keistimewaan ayam gepuk berapi kami!</p>
-                        <p class="price">RM 14.50</p>
-                    </div>
-                </div>
-
-                <div class="promo-card menu-card" data-media-type="image" data-media-src="Bahan/menubaru.jpeg">
-                    <span class="promo-tag-badge">BARU 🌟</span>
-                    <div class="card-img-wrapper"><img src="Bahan/menubaru.jpeg" alt="Chicken Crispy Salad"></div>
-                    <div class="card-info">
-                        <h3>Chicken Crispy Salad</h3>
-                        <p class="desc">Menu baru yang sihat, crispy dan mengeyangkan!</p>
-                        <p class="price">RM 14.80</p>
-                    </div>
-                </div>
-
-                <div class="promo-card menu-card" data-media-type="image" data-media-src="Bahan/menubaru (2).jpeg">
-                    <span class="promo-tag-badge">BARU 🌟</span>
-                    <div class="card-img-wrapper"><img src="Bahan/menubaru (2).jpeg" alt="Affogato Matcha Strawberry"></div>
-                    <div class="card-info">
-                        <h3>Affogato Matcha Strawberry</h3>
-                        <p class="desc">Menu baru berkrim, menyegarkan dan penuh rasa.</p>
-                        <p class="price">RM 7.90</p>
-                    </div>
-                </div>
-
-                <div class="promo-card menu-card" data-media-type="image" data-media-src="Bahan/menubaru (3).jpeg">
-                    <span class="promo-tag-badge">BEST SELLER 🔥</span>
-                    <div class="card-img-wrapper"><img src="Bahan/menubaru (3).jpeg" alt="Mantou"></div>
-                    <div class="card-info">
-                        <h3>Mantou</h3>
-                        <p class="desc">Dua menu baru rasa istimewa, satu tempat pilihan di PO Cafe!</p>
-                        <p class="price">RM 4.60</p>
-                    </div>
-                </div>
-
-                <div class="promo-card menu-card" data-media-type="image" data-media-src="Bahan/bagel.jpeg">
-                    <span class="promo-tag-badge">BEST SELLER 🔥</span>
-                    <div class="card-img-wrapper"><img src="Bahan/bagel.jpeg" alt="Bagel"></div>
-                    <div class="card-info">
-                        <h3>Bagel</h3>
-                        <p class="desc">Bagel segar dipanaskan setiap hari dengan pelbagai perisa.</p>
-                        <p class="price">RM 9.00 - RM 10.00</p>
-                    </div>
-                </div>
+                <!-- Dimuatkan secara dinamik melalui Firestore -->
             </div>
-
             <button class="slider-arrow right-arrow">&#10095;</button>
         </div>
     </section>
 
-    <!-- MENU SECTIONS (STRUKTUR ASAL DIKEKALKAN SEPENUHNYA) -->
+    <!-- MENU SECTIONS (100% DINAMIK DARI DATABASE) -->
     <section id="menu" class="menu-section" data-bg="#121413">
         <div class="section-title">
             <span>Pilihan Istimewa</span>
@@ -156,130 +104,22 @@
 
             <div class="sub-section" id="sub-pasta">
                 <h3 class="category-heading">Pasta Istimewa</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/pastabolonis.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/pastabolonis.jpeg" alt="Beef Bolognese"></div>
-                        <div class="card-info">
-                            <h3>Beef Bolognese</h3>
-                            <p class="desc">Slow-cooked beef bolognese sauce with selected herbs</p>
-                            <p class="price">RM 14.90</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/pastacreamy.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/pastacreamy.jpeg" alt="Creamy Chicken Spaghetti"></div>
-                        <div class="card-info">
-                            <h3>Creamy Chicken Spaghetti</h3>
-                            <p class="desc">Spaghetti cooked with chicken in a thick cream sauce</p>
-                            <p class="price">RM 14.90</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/pastarustic.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/pastarustic.jpeg" alt="Rustic Garlic Shrimp Spaghetti"></div>
-                        <div class="card-info">
-                            <h3>Rustic Garlic Shrimp</h3>
-                            <p class="desc">Spaghetti cooked with shrimp sautéed with fragrant garlic</p>
-                            <p class="price">RM 14.90</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
 
             <div class="sub-section" id="sub-western">
                 <h3 class="category-heading">Western Delights</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/westentender.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/westentender.jpeg" alt="Chicken Tender"></div>
-                        <div class="card-info">
-                            <h3>Chicken Tender</h3>
-                            <p class="desc">Isi ayam rangup disajikan bersama sos pilihan.</p>
-                            <p class="price">RM 15.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/westenchop.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/westenchop.jpeg" alt="Fried Chicken Chop"></div>
-                        <div class="card-info">
-                            <h3>Fried Chicken Chop</h3>
-                            <p class="desc">Chicken chop goreng rangup keemasan.</p>
-                            <p class="price">RM 11.90</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/westenwedges.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/westenwedges.jpeg" alt="Cheesy Wedges"></div>
-                        <div class="card-info">
-                            <h3>Cheesy Wedges</h3>
-                            <p class="desc">Kentang baji digoreng rangup disiram sos keju pekat.</p>
-                            <p class="price">RM 8.50</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
 
             <div class="sub-section" id="sub-kampung">
                 <h3 class="category-heading">Kampung Series</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/kampung.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/kampung.jpeg" alt="Nasi Goreng Kampung"></div>
-                        <div class="card-info">
-                            <h3>Nasi Goreng Kampung</h3>
-                            <p class="desc">Nasi goreng tradisional.</p>
-                            <p class="price">RM 7.90</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/kampungcina.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/kampungcina.jpeg" alt="Nasi Goreng Cina"></div>
-                        <div class="card-info">
-                            <h3>Nasi Goreng Cina</h3>
-                            <p class="desc">Nasi goreng ringkas.</p>
-                            <p class="price">RM 7.90</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/kampungcili.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/kampungcili.jpeg" alt="Nasi Goreng Cili Padi"></div>
-                        <div class="card-info">
-                            <h3>Nasi Goreng Cili Padi</h3>
-                            <p class="desc">Nasi goreng pedas menyengat.</p>
-                            <p class="price">RM 7.90</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/nasichickenchop.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/nasichickenchop.jpeg" alt="Nasi Goreng Chicken Chop"></div>
-                        <div class="card-info">
-                            <h3>Nasi Goreng Chicken Chop</h3>
-                            <p class="desc">Nasi goreng dihidangkan bersama chicken chop.</p>
-                            <p class="price">RM 15.90</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
 
             <div class="sub-section" id="sub-gepuk">
                 <h3 class="category-heading">Ayam Gepuk Berapi</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/ayamgepuk.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/ayamgepuk.jpeg" alt="Nasi Ayam Gepuk Original"></div>
-                        <div class="card-info">
-                            <h3>Nasi Ayam Gepuk Original</h3>
-                            <p class="desc">Nasi bersama ayam gepuk original dan sambal pedas.</p>
-                            <p class="price">RM 14.50</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/ayamgepukcrispy.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/ayamgepukcrispy.jpeg" alt="Nasi Ayam Gepuk Crispy"></div>
-                        <div class="card-info">
-                            <h3>Nasi Ayam Gepuk Crispy</h3>
-                            <p class="desc">Ayam gepuk versi rangup (#1 most liked).</p>
-                            <p class="price">RM 15.50</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/ayamgepuk.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/ayamgepuk.jpeg" alt="Set Nasi Ayam Gepuk"></div>
-                        <div class="card-info">
-                            <h3>Set Nasi Ayam Gepuk</h3>
-                            <p class="desc">Set lengkap istimewa nasi ayam gepuk.</p>
-                            <p class="price">RM 17.00</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
         </div>
 
@@ -294,148 +134,17 @@
 
             <div class="sub-section" id="sub-breakfast">
                 <h3 class="category-heading">Breakfast & Sarapan Pagi</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/breakfasttelur.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/breakfasttelur.jpeg" alt="Telur Separuh Masak"></div>
-                        <div class="card-info">
-                            <h3>Telur Separuh Masak</h3>
-                            <p class="desc">2 Pcs telur separuh masak segar.</p>
-                            <p class="price">RM 3.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/nasilemak.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/nasilemak.jpeg" alt="Nasi Lemak Telur Mata"></div>
-                        <div class="card-info">
-                            <h3>Nasi Lemak Telur Mata</h3>
-                            <p class="desc">Nasi lemak wangi berserta telur mata kerbau.</p>
-                            <p class="price">RM 5.90</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/nasilemakcrispy.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/nasilemakcrispy.jpeg" alt="Nasi Lemak Ayam Crispy"></div>
-                        <div class="card-info">
-                            <h3>Nasi Lemak Ayam Crispy</h3>
-                            <p class="desc">Nasi lemak lengkap bersama ayam goreng crispy.</p>
-                            <p class="price">RM 11.90</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/breakfastroti.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/breakfastroti.jpeg" alt="Roti Bakar"></div>
-                        <div class="card-info">
-                            <h3>Roti Bakar</h3>
-                            <p class="desc">Roti bakar rangup disapu kaya dan mentega.</p>
-                            <p class="price">RM 2.50</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/breeakfastbig.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/breeakfastbig.jpeg" alt="Big Breakfast"></div>
-                        <div class="card-info">
-                            <h3>Big Breakfast</h3>
-                            <p class="desc">Set sarapan pagi ala barat yang mengenyangkan.</p>
-                            <p class="price">RM 10.00</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
 
             <div class="sub-section" id="sub-extra">
                 <h3 class="category-heading">Pilihan Tambahan / Extra</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/extracrispy.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/extracrispy.jpeg" alt="Ayam Crispy"></div>
-                        <div class="card-info">
-                            <h3>Ayam Crispy</h3>
-                            <p class="desc">2 Pcs tambahan ayam crispy.</p>
-                            <p class="price">RM 6.60</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/extragepuk.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/extragepuk.jpeg" alt="Ayam Gepuk"></div>
-                        <div class="card-info">
-                            <h3>Ayam Gepuk</h3>
-                            <p class="desc">Ketulan ayam gepuk tambahan (#2 most liked).</p>
-                            <p class="price">RM 9.30</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/extranasi.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/extranasi.jpeg" alt="Nasi"></div>
-                        <div class="card-info">
-                            <h3>Nasi Putih</h3>
-                            <p class="desc">Sepinggan nasi putih tambahan.</p>
-                            <p class="price">RM 2.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/extrasambal.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/extrasambal.jpeg" alt="Sambal Gepuk"></div>
-                        <div class="card-info">
-                            <h3>Sambal Gepuk & Gajus</h3>
-                            <p class="desc">Ekstra sambal gepuk berapi.</p>
-                            <p class="price">RM 3.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/extrasambal.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/extrasambal.jpeg" alt="Sambal Nasi Lemak"></div>
-                        <div class="card-info">
-                            <h3>Sambal Nasi Lemak</h3>
-                            <p class="desc">Ekstra sambal nasi lemak.</p>
-                            <p class="price">RM 1.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/extrakobis.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/extrakobis.jpeg" alt="Kobis Goreng"></div>
-                        <div class="card-info">
-                            <h3>Kobis Goreng</h3>
-                            <p class="desc">Kobis goreng rangup.</p>
-                            <p class="price">RM 3.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/extratempe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/extratempe.jpeg" alt="Tempe Goreng"></div>
-                        <div class="card-info">
-                            <h3>Tempe Goreng</h3>
-                            <p class="desc">Tempe goreng rangup.</p>
-                            <p class="price">RM 2.00</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
 
             <div class="sub-section" id="sub-kids">
                 <h3 class="category-heading">Kids Meal</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/kidskentang.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/kidskentang.jpeg" alt="French Fries"></div>
-                        <div class="card-info">
-                            <h3>French Fries</h3>
-                            <p class="desc">Kentang goreng saiz kanak-kanak.</p>
-                            <p class="price">RM 5.50</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/kidsnugget.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/kidsnugget.jpeg" alt="Chicken Nugget"></div>
-                        <div class="card-info">
-                            <h3>Chicken Nugget</h3>
-                            <p class="desc">Nugget ayam goreng keemasan.</p>
-                            <p class="price">RM 9.90</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/kidshotdog.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/kidshotdog.jpeg" alt="Cocktail Sausage"></div>
-                        <div class="card-info">
-                            <h3>Cocktail Sausage</h3>
-                            <p class="desc">Sosej cocktail digoreng sempurna.</p>
-                            <p class="price">RM 5.50</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/kidsnugget.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/kidsnugget.jpeg" alt="Combo Food & Water"></div>
-                        <div class="card-info">
-                            <h3>Combo Food & Water</h3>
-                            <p class="desc">Set combo makanan dan minuman kanak-kanak.</p>
-                            <p class="price">RM 9.90</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
         </div>
 
@@ -449,174 +158,12 @@
 
             <div class="sub-section" id="sub-coffee">
                 <h3 class="category-heading">Coffee Selection</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/americano.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/americano.jpeg" alt="Americano"></div>
-                        <div class="card-info">
-                            <h3>Americano</h3>
-                            <p class="desc">Espresso segar bersama air.</p>
-                            <p class="price">from RM 8.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Latte"></div>
-                        <div class="card-info">
-                            <h3>Latte</h3>
-                            <p class="desc">Espresso dengan susu segar.</p>
-                            <p class="price">from RM 9.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffecapucino.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffecapucino.jpeg" alt="Cappuccino"></div>
-                        <div class="card-info">
-                            <h3>Cappuccino</h3>
-                            <p class="desc">Keseimbangan buih susu dan espresso (#3 most liked).</p>
-                            <p class="price">from RM 9.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/chocolate.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/chocolate.jpeg" alt="Mocha"></div>
-                        <div class="card-info">
-                            <h3>Mocha</h3>
-                            <p class="desc">Gabungan kopi dan coklat.</p>
-                            <p class="price">from RM 12.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Vanilla Latte"></div>
-                        <div class="card-info">
-                            <h3>Vanilla Latte</h3>
-                            <p class="desc">Latte perisa vanila.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Caramel Latte"></div>
-                        <div class="card-info">
-                            <h3>Caramel Latte</h3>
-                            <p class="desc">Latte perisa karamel.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Hazelnut Latte"></div>
-                        <div class="card-info">
-                            <h3>Hazelnut Latte</h3>
-                            <p class="desc">Latte perisa hazelnut wangi.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Roasted Hazelnut"></div>
-                        <div class="card-info">
-                            <h3>Roasted Hazelnut</h3>
-                            <p class="desc">Kopi perisa hazelnut panggang.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/Barucoffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Salted Caramel"></div>
-                        <div class="card-info">
-                            <h3>Salted Caramel</h3>
-                            <p class="desc">Kopi karamel masin lemak manis.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Tiramisu"></div>
-                        <div class="card-info">
-                            <h3>Tiramisu</h3>
-                            <p class="desc">Kopi berperisa kek tiramisu.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Macadamia Nut"></div>
-                        <div class="card-info">
-                            <h3>Macadamia Nut</h3>
-                            <p class="desc">Kopi berperisa kekacang macadamia.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Butterscotch"></div>
-                        <div class="card-info">
-                            <h3>Butterscotch</h3>
-                            <p class="desc">Kopi berperisa butterscotch berkrim.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffe.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffe.jpeg" alt="Tofflenut"></div>
-                        <div class="card-info">
-                            <h3>Tofflenut</h3>
-                            <p class="desc">Kopi berperisa tofflenut istimewa.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffespanish.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffespanish.jpeg" alt="Spanish Latte"></div>
-                        <div class="card-info">
-                            <h3>Spanish Latte</h3>
-                            <p class="desc">Latte gaya Sepanyol yang kaya.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/coffemachiato.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/coffemachiato.jpeg" alt="Caramel Macchiato"></div>
-                        <div class="card-info">
-                            <h3>Caramel Macchiato</h3>
-                            <p class="desc">Sirap karamel, susu dan espresso.</p>
-                            <p class="price">RM 13.00</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
 
             <div class="sub-section" id="sub-sparkling">
                 <h3 class="category-heading">Sparkling Americano</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/americano.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/americano.jpeg" alt="Green Apple Americano"></div>
-                        <div class="card-info">
-                            <h3>Green Apple Americano</h3>
-                            <p class="desc">Americano ais bersama soda perisa epal hijau.</p>
-                            <p class="price">from RM 10.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/americano.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/americano.jpeg" alt="Strawberry Americano"></div>
-                        <div class="card-info">
-                            <h3>Strawberry Americano</h3>
-                            <p class="desc">Americano ais bersama soda perisa strawberi.</p>
-                            <p class="price">from RM 10.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/americano.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/americano.jpeg" alt="Blue Lagoon Americano"></div>
-                        <div class="card-info">
-                            <h3>Blue Lagoon Americano</h3>
-                            <p class="desc">Americano ais bersama soda blue lagoon.</p>
-                            <p class="price">from RM 10.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/americano.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/americano.jpeg" alt="Watermelon Americano"></div>
-                        <div class="card-info">
-                            <h3>Watermelon Americano</h3>
-                            <p class="desc">Americano ais bersama soda perisa tembikai.</p>
-                            <p class="price">from RM 10.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/americano.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/americano.jpeg" alt="Lychee Americano"></div>
-                        <div class="card-info">
-                            <h3>Lychee Americano</h3>
-                            <p class="desc">Americano ais bersama soda perisa laici.</p>
-                            <p class="price">from RM 10.00</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
         </div>
 
@@ -632,218 +179,22 @@
 
             <div class="sub-section" id="sub-fizzy">
                 <h3 class="category-heading">Fizzy & Refreshing Soda</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/sparkapple.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/sparkapple.jpeg" alt="Green Apple Sparkling"></div>
-                        <div class="card-info">
-                            <h3>Green Apple Sparkling</h3>
-                            <p class="desc">Air soda menyegarkan perisa epal hijau.</p>
-                            <p class="price">RM 9.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/sparkstraw.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/sparkstraw.jpeg" alt="Strawberry Lemonade Sparkling"></div>
-                        <div class="card-info">
-                            <h3>Strawberry Lemonade</h3>
-                            <p class="desc">Soda strawberi lemon yang menyegarkan.</p>
-                            <p class="price">RM 9.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/sparklagon.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/sparklagon.jpeg" alt="Blue Lagoon Lemonade Sparkling"></div>
-                        <div class="card-info">
-                            <h3>Blue Lagoon Lemonade</h3>
-                            <p class="desc">Soda blue lagoon lemon.</p>
-                            <p class="price">RM 9.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/sparkwatermelon.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/sparkwatermelon.jpeg" alt="Watermelon Lychee Sparkling"></div>
-                        <div class="card-info">
-                            <h3>Watermelon Lychee</h3>
-                            <p class="desc">Soda tembikai laici.</p>
-                            <p class="price">RM 9.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/sparklaici.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/sparklaici.jpeg" alt="Lychee Lemonade Sparkling"></div>
-                        <div class="card-info">
-                            <h3>Lychee Lemonade</h3>
-                            <p class="desc">Soda laici lemon.</p>
-                            <p class="price">RM 9.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/sparkbutter.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/sparkbutter.jpeg" alt="Butterfly Lemonade Sparkling"></div>
-                        <div class="card-info">
-                            <h3>Butterfly Lemonade</h3>
-                            <p class="desc">Soda bunga telang lemon.</p>
-                            <p class="price">RM 11.00</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
 
             <div class="sub-section" id="sub-non-coffee">
                 <h3 class="category-heading">Non-Coffee & Chocolate</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/chocolate.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/chocolate.jpeg" alt="Chocolate"></div>
-                        <div class="card-info">
-                            <h3>Chocolate</h3>
-                            <p class="desc">Coklat kaya dan berkrim.</p>
-                            <p class="price">from RM 11.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/noncloud.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/noncloud.jpeg" alt="Strawberry Cloud"></div>
-                        <div class="card-info">
-                            <h3>Strawberry Cloud</h3>
-                            <p class="desc">Minuman strawberi bertekstur awan berkrim.</p>
-                            <p class="price">RM 14.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/nonstrawcoklat.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/nonstrawcoklat.jpeg" alt="Strawberry Chocolate"></div>
-                        <div class="card-info">
-                            <h3>Strawberry Chocolate</h3>
-                            <p class="desc">Gabungan coklat dan strawberi.</p>
-                            <p class="price">RM 15.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/nonsirap.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/nonsirap.jpeg" alt="Sirap"></div>
-                        <div class="card-info">
-                            <h3>Sirap</h3>
-                            <p class="desc">Air sirap sejuk.</p>
-                            <p class="price">RM 3.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/nonoren.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/nonoren.jpeg" alt="Oren Sunquick"></div>
-                        <div class="card-info">
-                            <h3>Oren Sunquick</h3>
-                            <p class="desc">Jus oren segar sunquick.</p>
-                            <p class="price">RM 3.50</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/chocolate.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/chocolate.jpeg" alt="Vanilla Chocolate"></div>
-                        <div class="card-info">
-                            <h3>Vanilla Chocolate</h3>
-                            <p class="desc">Coklat berperisa vanila.</p>
-                            <p class="price">from RM 12.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="BahanBaru/chocolate.jpeg">
-                        <div class="card-img-wrapper"><img src="BahanBaru/chocolate.jpeg" alt="Salted Caramel Chocolate"></div>
-                        <div class="card-info">
-                            <h3>Salted Caramel Choc</h3>
-                            <p class="desc">Coklat berkaramel masin.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/nonstraw.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/nonstraw.jpeg" alt="Strawberry"></div>
-                        <div class="card-info">
-                            <h3>Strawberry</h3>
-                            <p class="desc">Minuman perisa strawberi.</p>
-                            <p class="price">from RM 12.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/nonteo.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/nonteo.jpeg" alt="Teh Boh"></div>
-                        <div class="card-info">
-                            <h3>Teh Boh</h3>
-                            <p class="desc">Teh boh ais klasik.</p>
-                            <p class="price">from RM 3.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/americano.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/americano.jpeg" alt="Kopi Che Nah"></div>
-                        <div class="card-info">
-                            <h3>Kopi Che Nah</h3>
-                            <p class="desc">Kopi kampung istimewa Che Nah.</p>
-                            <p class="price">from RM 2.80</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
 
             <div class="sub-section" id="sub-matcha">
                 <h3 class="category-heading">Matcha Series</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/matcha.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/matcha.jpeg" alt="Matcha Latte"></div>
-                        <div class="card-info">
-                            <h3>Matcha Latte</h3>
-                            <p class="desc">Serbuk matcha tulen bersama susu.</p>
-                            <p class="price">from RM 13.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/matchastraw.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/matchastraw.jpeg" alt="Matcha Strawberry"></div>
-                        <div class="card-info">
-                            <h3>Matcha Strawberry</h3>
-                            <p class="desc">Gabungan unik matcha dan strawberi.</p>
-                            <p class="price">from RM 14.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/matchacoklat.jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/matchacoklat.jpeg" alt="Matcha Chocolate"></div>
-                        <div class="card-info">
-                            <h3>Matcha Chocolate</h3>
-                            <p class="desc">Gabungan matcha dan coklat.</p>
-                            <p class="price">from RM 14.00</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
 
             <div class="sub-section" id="sub-frappe">
                 <h3 class="category-heading">Frappe & Blended</h3>
-                <div class="menu-grid">
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/frappe (1).jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/frappe (1).jpeg" alt="Mocha Frappe"></div>
-                        <div class="card-info">
-                            <h3>Mocha Frappe</h3>
-                            <p class="desc">Frappe mocha kisar ais.</p>
-                            <p class="price">from RM 14.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/frappe (2).jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/frappe (2).jpeg" alt="Cappuccino Frappe"></div>
-                        <div class="card-info">
-                            <h3>Cappuccino Frappe</h3>
-                            <p class="desc">Frappe cappuccino kisar ais.</p>
-                            <p class="price">from RM 14.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/frappe (1).jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/frappe (1).jpeg" alt="Chocolate Frappe"></div>
-                        <div class="card-info">
-                            <h3>Chocolate Frappe</h3>
-                            <p class="desc">Frappe coklat kisar ais.</p>
-                            <p class="price">from RM 14.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/frappe (2).jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/frappe (2).jpeg" alt="Tiramisu Frappe"></div>
-                        <div class="card-info">
-                            <h3>Tiramisu Frappe</h3>
-                            <p class="desc">Frappe tiramisu kisar ais.</p>
-                            <p class="price">from RM 14.00</p>
-                        </div>
-                    </div>
-                    <div class="menu-card" data-media-type="image" data-media-src="Bahan/frappe (1).jpeg">
-                        <div class="card-img-wrapper"><img src="Bahan/frappe (1).jpeg" alt="Oreo Chocolate"></div>
-                        <div class="card-info">
-                            <h3>Oreo Chocolate</h3>
-                            <p class="desc">Frappe coklat bersama biskut oreo.</p>
-                            <p class="price">from RM 15.00</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="menu-grid"></div>
             </div>
         </div>
     </section>
@@ -874,7 +225,7 @@
         </div>
     </section>
 
-    <!-- GALERI -->
+    <!-- GALERI (100% DINAMIK DARI DATABASE) -->
     <section id="gallery" class="gallery-section" data-bg="#121413">
         <div class="section-title">
             <span>Suasana & Keselesaan</span>
@@ -882,13 +233,8 @@
             <div class="line"></div>
         </div>
         <div class="gallery-container">
-            <div class="gallery-grid">
-                <div class="gallery-item"><img src="Bahan/galeri.jpeg" alt="Sudut Coffee"></div>
-                <div class="gallery-item"><img src="Bahan/galeri (2).jpeg" alt="Interior Cozy"></div>
-                <div class="gallery-item"><img src="Bahan/galeri (3).jpeg" alt="Hiasan Kafe"></div>
-                <div class="gallery-item"><img src="Bahan/galeri (4).jpeg" alt="Ruang Kerja"></div>
-                <div class="gallery-item"><img src="Bahan/galeri (5).jpeg" alt="Biji Kopi"></div>
-                <div class="gallery-item"><img src="Bahan/galeri (6).jpeg" alt="Vibe Kafe"></div>
+            <div class="gallery-grid" id="customer-gallery-grid">
+                <!-- Dimuatkan secara dinamik melalui Firestore -->
             </div>
         </div>
     </section>
@@ -918,27 +264,36 @@
         </div>
     </section>
 
-    <!-- SEKSYEN MAKLUM BALAS PELANGGAN (TAMBAHAN BAHARU) -->
-    <section id="feedback-section" class="menu-section" data-bg="#121413">
-        <div class="section-title">
-            <span>Suara Anda Penting</span>
-            <h2>Beri Maklum Balas</h2>
-            <div class="line"></div>
-        </div>
-        <div style="max-width: 600px; margin: 0 auto; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
-            <form id="customer-feedback-form">
-                <label style="display:block; margin-bottom:8px; font-weight:600;">Nama Anda:</label>
-                <input type="text" id="fb-name" required style="width:100%; padding:12px; border-radius:8px; background:#121413; color:#fff; border:1px solid #334038; margin-bottom:15px; outline:none;">
-                
-                <label style="display:block; margin-bottom:8px; font-weight:600;">Maklum Balas / Cadangan:</label>
-                <textarea id="fb-message" required rows="4" style="width:100%; padding:12px; border-radius:8px; background:#121413; color:#fff; border:1px solid #334038; margin-bottom:20px; outline:none;"></textarea>
-                
-                <button type="submit" class="btn-primary" style="width:100%; text-align:center; cursor:pointer;">Hantar Maklum Balas</button>
-            </form>
-        </div>
-    </section>
+  <!-- SEKSYEN MAKLUM BALAS PELANGGAN -->
+<section id="feedback-section" class="menu-section" data-bg="#121413">
+    <div class="section-title">
+        <span>Suara Anda Penting</span>
+        <h2>Beri Maklum Balas</h2>
+        <div class="line"></div>
+    </div>
+    <div style="max-width: 600px; margin: 0 auto; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);">
+        <form id="customer-feedback-form">
+            <label style="display:block; margin-bottom:8px; font-weight:600;">Nama Anda:</label>
+            <input type="text" id="fb-name" required style="width:100%; padding:12px; border-radius:8px; background:#121413; color:#fff; border:1px solid #334038; margin-bottom:15px; outline:none;">
+            
+            <label style="display:block; margin-bottom:8px; font-weight:600;">Penarafan Bintang:</label>
+            <select id="fb-rating" required style="width:100%; padding:12px; border-radius:8px; background:#121413; color:#fff; border:1px solid #334038; margin-bottom:15px; outline:none;">
+                <option value="5">⭐⭐⭐⭐⭐ (5 Bintang)</option>
+                <option value="4">⭐⭐⭐⭐ (4 Bintang)</option>
+                <option value="3">⭐⭐⭐ (3 Bintang)</option>
+                <option value="2">⭐⭐ (2 Bintang)</option>
+                <option value="1">⭐ (1 Bintang)</option>
+            </select>
 
-    <!-- FOOTER -->
+            <label style="display:block; margin-bottom:8px; font-weight:600;">Maklum Balas / Cadangan:</label>
+            <textarea id="fb-message" required rows="4" style="width:100%; padding:12px; border-radius:8px; background:#121413; color:#fff; border:1px solid #334038; margin-bottom:20px; outline:none;"></textarea>
+            
+            <button type="submit" class="btn-primary" style="width:100%; text-align:center; cursor:pointer;">Hantar Maklum Balas</button>
+        </form>
+    </div>
+</section>
+
+    <!-- FOOTER (PAUTAN SOSIAL DINAMIK DARI DATABASE) -->
     <footer id="contact" class="site-footer">
         <div class="footer-top">
             <div class="footer-col about-col">
@@ -959,8 +314,9 @@
                 <h3>Ikuti Kami</h3>
                 <p>Jom ikuti perkembangan terbaru, promosi, dan di sebalik tabir kafe kami.</p>
                 <div class="social-links-new">
-                    <a href="#" target="_blank" class="social-icon">📱 Instagram</a>
-                    <a href="#" target="_blank" class="social-icon">🎵 TikTok</a>
+                    <a href="#" target="_blank" class="social-icon" id="link-ig">📱 Instagram</a>
+                    <a href="#" target="_blank" class="social-icon" id="link-tiktok">🎵 TikTok</a>
+                    <a href="#" target="_blank" class="social-icon" id="link-fb">📘 Facebook</a>
                 </div>
             </div>
         </div>
